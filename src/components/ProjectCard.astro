@@ -1,0 +1,82 @@
+---
+interface Props {
+  id: string;
+  title: string;
+  thumb: string;
+  alt?: string;
+  onClick?: string;
+}
+
+const { id, title, thumb, alt } = Astro.props;
+---
+
+<article
+  class="card"
+  id={id}
+  role="button"
+  tabindex="0"
+  aria-label={`${title} (open details)`}
+>
+  <div class="thumb" style={`--thumb: url('${thumb}');`} aria-hidden="true">
+  </div>
+  <h2 class="title">{title}</h2>
+</article>
+
+<style>
+  .card {
+    background: var(--bg);
+    border: 1px solid var(--cyanBorder);
+    border-radius: 18px;
+    padding: clamp(14px, 2.2vw, 18px);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    color: var(--text);
+    box-shadow:
+      0 0 0 rgba(0, 0, 0, 0.2),
+      0 0 28px var(--cyanGlow);
+    transition:
+      transform 220ms ease,
+      box-shadow 220ms ease,
+      border-color 220ms ease;
+    cursor: pointer;
+    outline: none;
+  }
+
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow:
+      0 8px 24px rgba(0, 0, 0, 0.35),
+      0 0 34px var(--cyanGlow);
+    border-color: rgba(0, 229, 255, 0.38);
+  }
+
+  .card:focus-visible {
+    box-shadow:
+      0 0 0 2px rgba(255, 255, 255, 0.06) inset,
+      0 0 0 3px rgba(0, 229, 255, 0.45),
+      0 0 36px var(--cyanGlow);
+  }
+
+  .thumb {
+    border-radius: 14px;
+    aspect-ratio: 5 / 3;
+    background: linear-gradient(
+        135deg,
+        rgba(0, 229, 255, 0.08),
+        rgba(57, 255, 20, 0.05)
+      ),
+      var(--thumb);
+    background-size: cover;
+    background-position: center;
+    border: 1px solid rgba(0, 229, 255, 0.25);
+    box-shadow: inset 0 0 18px rgba(0, 229, 255, 0.08);
+  }
+
+  .title {
+    font-size: clamp(1rem, 1.2vw, 1.15rem);
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    color: var(--text);
+  }
+</style>

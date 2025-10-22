@@ -1,0 +1,85 @@
+---
+// Props:
+// href: string (required)
+// label: string (required)
+// icon: string (emoji or short text)
+// external?: boolean (opens in new tab if true)
+const { href, label, icon = "🔗", external = false } = Astro.props;
+const target = external ? "_blank" : undefined;
+const rel = external ? "noopener noreferrer" : undefined;
+---
+
+<a class="bubble" href={href} target={target} rel={rel} aria-label={label}>
+  <span class="icon" aria-hidden="true">{icon}</span>
+  <span class="text">{label}</span>
+</a>
+
+<style>
+  .bubble {
+    --teal: 0 255 200;
+    --bg: rgba(255, 255, 255, 0.03);
+    --border: rgba(var(--teal) / 0.45);
+    --glow: 0 0 16px rgba(var(--teal) / 0.35);
+
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    width: 100%;
+    padding: 1rem 1.2rem;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    text-decoration: none;
+    color: #e9fdfb;
+    font-family: var(--font-mono, "JetBrains Mono", ui-monospace, monospace);
+    letter-spacing: 0.2px;
+    box-shadow: var(--glow);
+    transition:
+      transform 0.18s ease,
+      box-shadow 0.18s ease,
+      border-color 0.18s ease,
+      background 0.18s ease;
+    outline: none;
+  }
+
+  .bubble:hover,
+  .bubble:focus-visible {
+    transform: translateY(-2px);
+    border-color: rgba(var(--teal) / 0.9);
+    box-shadow: 0 0 26px rgba(var(--teal) / 0.55);
+    background: rgba(var(--teal) / 0.08);
+  }
+
+  .icon {
+    width: 2rem;
+    height: 2rem;
+    display: grid;
+    place-items: center;
+    border-radius: 999px;
+    border: 1px solid rgba(var(--teal) / 0.45);
+    background: rgba(var(--teal) / 0.1);
+    font-size: 1rem;
+    line-height: 1;
+    transform: translateX(-2px);
+    transition:
+      transform 0.2s ease,
+      box-shadow 0.2s ease;
+  }
+  .bubble:hover .icon,
+  .bubble:focus-visible .icon {
+    transform: translateX(0);
+    box-shadow: 0 0 16px rgba(var(--teal) / 0.45);
+  }
+
+  .text {
+    font-weight: 600;
+    font-size: 0.98rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .bubble,
+    .icon {
+      transition: none;
+    }
+  }
+</style>

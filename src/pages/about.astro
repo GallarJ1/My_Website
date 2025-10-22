@@ -1,0 +1,385 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import AboutSidebar from "../components/AboutSidebar.astro";
+
+/** Sidebar section map (ids MUST match section ids below) */
+const sections = [
+  { id: "intro", label: "Intro" },
+  { id: "story", label: "My Story" },
+  { id: "career", label: "Professional Career" },
+  { id: "goals", label: "Goals & Aspirations" },
+  { id: "mission", label: "Mission Statement" },
+];
+---
+
+<BaseLayout title="About – Jeremy">
+  <main class="about-wrap">
+    <AboutSidebar {sections} />
+
+    <section class="about-content">
+      <!-- Intro -->
+      <section id="intro" class="block fade-in">
+        <h1 class="section-title">Who I Am</h1>
+        <p class="lead">
+          I am a Systems Administrator specializing in building and managing the core infrastructure that keeps organizations running. 
+          My work spans from automating critical IT operations and orchestrating hybrid cloud environments to auditing security layers and engineering backend systems 
+          that support business growth. I approach every project with a balance of precision and innovation, turning complex technical challenges 
+          into reliable, long-term solutions that strengthen the foundation of modern enterprises.
+        </p>
+      </section>
+
+      <!-- My Story -->
+      <section id="story" class="block fade-in">
+        <h2 class="section-title">My Story</h2>
+        <p>
+          My passion for technology began in childhood, when I saved up my allowance to buy my first budget PC. 
+          With no knowledge of how to build a computer and no pre-built option within my budget, 
+          I dove head-first into the process — learning how to handle hardware, assemble components, and install an operating system. 
+          That hands-on experience sparked a love for IT that only grew stronger over time.
+        </p>
+        <p>
+          In college at Purdue University, my foundational knowledge expanded dramatically. 
+          I learned how to code, lead teams, work with networks and security, manage systems, and — most importantly — master algorithms and problem-solving. 
+          These experiences shaped the way I think about technology and how I approach complex challenges.
+        </p>
+        <p>
+          That same curiosity and drive now fuel my professional work, where I find deep satisfaction in automating tedious processes, 
+          collaborating with others, and engineering solutions that make a real impact. As a first-generation American, 
+          my background has instilled in me a relentless work ethic, resilience, and a commitment to continuous learning — 
+          values that have guided me from childhood to where I am today.
+        </p>
+      </section>
+
+      <!-- Professional Career (timeline-style with skills woven in) -->
+      <section id="career" class="block fade-in">
+        <h2 class="section-title">Professional Career</h2>
+
+        <ol class="timeline">
+          <li>
+            <div class="time">2025–Present</div>
+            <div class="card">
+              <h3>Systems Administrator → Midwest Aerospace LLC</h3>
+              <p>
+                As the sole IT professional, I lead and manage the organization's entire technology ecosystem — overseeing operations, infrastructure, automation, and security. 
+                I modernized a legacy environment by integrating Active Directory into core infrastructure, 
+                implementing MFA, EDR, UEM solutions, and federating critical services to improve security, scalability, and ensure CMMC compliance.
+              </p>
+              <p>
+               I architected a hybrid infrastructure by migrating on-prem servers and data into Azure, designed and enforced Zero-Trust firewall policies, and built secure 
+               VPNs, VNets, DMZs, and perimeter rules. I also engineered failover strategies for data and core systems, streamlined permissions 
+               and file-share management, and introduced backup and disaster recovery protocols. 
+              </p>
+              <p>
+                Beyond infrastructure, I collaborated across departments to document and implement IT policies, automated recurring workflows using Azure Automation, PowerShell, and Python.
+                I also developed internal tools such as a custom asset management system to streamline daily operations and improve visibility.
+              </p>
+              <div class="pills">
+                <span class="pill">CI/CD & IaC</span>
+                <span class="pill">Active Directory</span>
+                <span class="pill">Zero Trust Security</span>
+                <span class="pill">Azure Hybrid Infastructure</span>
+                <span class="pill">Automation: PowerShell · Python</span>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="time">2023–2025</div>
+            <div class="card">
+              <h3>IT Specialist → Solid Platforms</h3>
+              <p>
+                In this role, I was responsible for supporting day-to-day IT operations while driving infrastructure modernization and automation initiatives. 
+                I provided Tier 1–2 support, resolved help desk tickets, and handled on-call requests across multiple remote sites, 
+                often traveling to deploy new infrastructure or service existing hardware.
+              </p>
+              <p>
+                I implemented a full MDM solution with Microsoft Intune, enabling centralized device management for all mobile endpoints — 
+                including remote deployment, enforcement policies, and real-time monitoring. I also engineered a PXE boot environment using WDS to streamline 
+                large-scale laptop and desktop provisioning, significantly accelerating device deployment workflows.
+              </p>
+              <p>
+                To strengthen security and improve operational visibility, I built automated vulnerability alerting systems, and created PowerShell and Azure automation 
+                scripts that streamlined data gathering, policy enforcement, and Active Directory management. I also migrated on-premises servers into the cloud and deployed 
+                scalable virtual environments to support secure data access for a growing remote workforce.
+              </p>
+              <p>
+                One of the most impactful projects I delivered was the development of a custom internal AI assistant using Azure OpenAI, integrated with multiple internal data sources. 
+                I fine-tuned the model on organizational datasets, implemented phrasing correlation, and configured security roles — enabling employees to retrieve information securely and quickly.
+              </p>
+              <div class="pills">
+                <span class="pill">Azure OpenAI Integration</span>
+                <span class="pill">PXE Deployment (WDS)</span>
+                <span class="pill">Micrsoft Intune & MDM</span>
+                <span class="pill">Security Automation</span>
+                <span class="pill">Cloud Migration & Virtualization</span>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="time">2021-2023</div>
+            <div class="card">
+              <h3>IT Support Specialist → Asurion LLC</h3>
+              <p>
+                In my first professional IT role, I provided frontline technical support and contributed to the smooth operation of core IT services. I was responsible for resolving Tier 1 and Tier 2 support tickets, 
+                assisting users with hardware and software issues, and maintaining detailed documentation within our ticketing and asset management systems.
+              </p>
+              <p>
+                I played an active role in new user onboarding, including account provisioning, security group assignments, and network access configuration through Active Directory. \
+                I supported email security by identifying and remediating phishing attempts, quarantining spoofed messages, and maintaining safe sender policies. 
+                I also assisted with firewall configuration and general network troubleshooting to support secure and reliable connectivity across the organization.
+              </p>
+              <p>
+                Beyond support, I maintained hardware inventory and performed hands-on device repairs, including replacing components, soldering, and refurbishing devices for redeployment. 
+                Because Asurion is both a technology services and repair company, my role was hybrid — 
+                combining traditional IT support with hardware diagnostics and repair for devices from satellite locations that required specialized servicing.
+              </p>
+              <div class="pills">
+                <span class="pill">Tier 1 & 2 Support</span>
+                <span class="pill">Network Troubleshooting</span>
+                <span class="pill">Hardware Repair & Diagnostics</span>
+                <span class="pill">Ticketing & Asset Management</span>
+              </div>
+            </div>
+          </li>
+        </ol>
+      </section>
+
+      <!-- Goals & Aspirations -->
+      <section id="goals" class="block fade-in">
+        <h2 class="section-title">Goals & Aspirations</h2>
+        <p>
+         I see myself continuing to grow in the IT space for the foreseeable future, with a clear goal of transitioning into DevOps or Cloud Engineering. I’ve 
+         already begun pursuing certifications to support that path, and I plan to continue strengthening my expertise in these areas as I advance in my career. 
+        </p>
+        <p>
+         I also intend to return to school remotely to pursue a Master’s degree in Computer Science or a related field, further deepening my technical knowledge and opening doors to more advanced engineering roles. A key area I aim to improve in 
+         is cloud technologies — particularly within Microsoft Azure, where the rapidly evolving ecosystem offers endless opportunities to learn and innovate.
+        </p>
+        <p>
+         The projects I’m most passionate about are those that teach new skills, encourage collaboration, and focus on automation and user-centric solutions. I’m especially excited about the future of artificial intelligence — a 
+         field I’ve already explored by implementing AI solutions into production environments. In the 
+         years ahead, I hope to expand my capabilities with AI-driven systems and leverage them to create smarter, more efficient infrastructure and workflows. 
+        </p>
+      </section>
+
+      <!-- Mission + Resume CTA -->
+      <section id="mission" class="block fade-in">
+        <h2 class="section-title">Mission Statement</h2>
+        <p>
+          The reason I chose a career in IT is simple: I want to help people. While I could have pursued software engineering and focused solely on back-end development, 
+          my passion lies in creating technology solutions that improve people’s daily work lives. Nothing is more rewarding to me than knowing that my work directly impacts someone’s productivity, efficiency, or overall experience.
+        </p>
+
+        <div class="cta-row">
+          <a class="glow-btn" href="/resume/My_Resume.pdf" download>
+            Download Resume
+          </a>
+          <span class="signature">— Jeremy Gallardo</span>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <!-- Scroll-spy + light motion -->
+  <script is:inline>
+    // Fade-in on enter
+    const fades = document.querySelectorAll('.fade-in');
+    const fadeObs = new IntersectionObserver((entries) => {
+      for (const e of entries) {
+        if (e.isIntersecting) e.target.classList.add('in');
+      }
+    }, { threshold: 0.1 });
+    fades.forEach(el => fadeObs.observe(el));
+
+    // Scroll-spy logic
+    const links = Array.from(document.querySelectorAll('.aside-link'));
+    const idMap = new Map(links.map(l => [l.dataset.section, l]));
+
+    // Observe each section by its ID
+    const targets = document.querySelectorAll('.about-content section[id]');
+    const spyObs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const id = e.target.id;
+          links.forEach(a => a.classList.remove('active'));
+          idMap.get(id)?.classList.add('active');
+        }
+      });
+    }, {
+      root: null,
+      rootMargin: '-45% 0px -45% 0px', // "active window" ~center of screen
+      threshold: 0.01
+    });
+    targets.forEach(sec => spyObs.observe(sec));
+
+    // Optional: immediate visual feedback when clicking a link
+    links.forEach(a => {
+      a.addEventListener('click', () => {
+        links.forEach(x => x.classList.remove('active'));
+        a.classList.add('active');
+      });
+    });
+  </script>
+
+    
+  <style>
+  /* Layout */
+  @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
+
+  /* Force signature to use Parisienne */
+  .about-content .signature {
+    font-family: 'Great Vibes', cursive !important;
+  }
+
+  /* Smooth anchor scrolling */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Section anchor offset (so sticky header doesn’t hide titles) */
+  .about-content > section {
+    scroll-margin-top: calc(6rem + 16px); /* adjust if your header height changes */
+  }
+
+  /* Section sizing & spacing so IntersectionObserver always sees them */
+  .about-content .block {
+    margin-bottom: 2.5rem;
+    padding: 0.25rem 0 1.5rem;
+    min-height: 55vh;
+  }
+  #mission.block {
+    min-height: 40vh;
+  }
+
+  /* Signature styling */
+  .signature {
+   font-family: 'Great Vibes', cursive !important;
+   font-size: clamp(1.1rem, 0.9rem + 0.6vw, 1.6rem);
+   line-height: 1;
+   color: #aaffd3;
+   text-shadow:
+     0 0 6px rgba(0,255,120,0.35),
+     0 0 14px rgba(0,255,120,0.22);
+   letter-spacing: 0.02em;
+   transform: translateY(1px);
+  }
+
+
+  .about-wrap {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 4rem 1.25rem 6rem;
+  }
+  @media (max-width: 900px) {
+    .about-wrap {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+      padding-top: 2rem;
+    }
+  }
+
+  .about-content .block { margin-bottom: 2.5rem; }
+  .section-title {
+    font-family: var(--font-heading, Orbitron, sans-serif);
+    font-size: clamp(1.2rem, 1rem + 1.2vw, 1.8rem);
+    letter-spacing: 0.04em;
+    margin: 0 0 0.75rem;
+    color: #e8d5ff; /* magenta/purple bias to match hero */
+    text-shadow: 0 0 12px rgba(184,0,255,0.25);
+  }
+  .lead {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    opacity: 0.9;
+  }
+
+  /* Timeline */
+  .timeline {
+    list-style: none;
+    margin: 1.25rem 0 0;
+    padding: 0;
+    border-left: 2px solid rgba(255,255,255,0.08);
+  }
+  .timeline > li {
+    position: relative;
+    padding-left: 1.25rem;
+    margin: 0 0 1.5rem;
+  }
+  .timeline > li::before {
+    content: "";
+    position: absolute;
+    left: -7px;
+    top: 0.4rem;
+    width: 10px; height: 10px;
+    border-radius: 999px;
+    background: #00ff78;
+    box-shadow: 0 0 10px rgba(0,255,120,0.65), 0 0 22px rgba(0,255,120,0.35);
+  }
+  .time {
+    font-size: 0.82rem;
+    opacity: 0.7;
+    margin-bottom: 0.35rem;
+  }
+  .card {
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 0.75rem;
+    padding: 0.9rem 1rem;
+    background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.015));
+  }
+
+  /* Neon pills (subtle) */
+  .pills { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.6rem; }
+  .pill {
+    font-size: 0.8rem;
+    padding: 0.25rem 0.55rem;
+    border-radius: 999px;
+    border: 1px solid rgba(0,255,120,0.35);
+    box-shadow: inset 0 0 8px rgba(0,255,120,0.07), 0 0 8px rgba(0,255,120,0.07);
+  }
+
+  /* CTA row */
+  .cta-row {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-top: 1rem;
+  }
+  .glow-btn {
+    display: inline-block;
+    padding: 0.8rem 1.15rem;
+    border-radius: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-decoration: none;
+    color: #fff;
+    border: 1px solid rgba(0,255,120,0.5);
+    box-shadow:
+      0 0 12px rgba(0,255,120,0.4),
+      0 0 28px rgba(0,255,120,0.18),
+      inset 0 0 10px rgba(0,255,120,0.18);
+    background: radial-gradient(100% 100% at 50% 0%, rgba(0,255,120,0.15), rgba(0,0,0,0.2));
+    transition: transform 120ms ease, box-shadow 200ms ease, border-color 200ms ease;
+  }
+  .glow-btn:hover {
+    transform: translateY(-1px);
+    box-shadow:
+      0 0 16px rgba(0,255,120,0.55),
+      0 0 36px rgba(0,255,120,0.26),
+      inset 0 0 12px rgba(0,255,120,0.22);
+    border-color: rgba(0,255,120,0.7);
+  }
+  .signature {
+    font-family: var(--font-heading, Orbitron, sans-serif);
+    font-size: 1rem;
+    opacity: 0.9;
+    color: #aaffd3;
+    text-shadow: 0 0 10px rgba(0,255,120,0.35);
+  }
+
+  /* Light motion */
+  .fade-in { opacity: 0; transform: translateY(8px); transition: opacity .5s ease, transform .5s ease; }
+  .fade-in.in { opacity: 1; transform: translateY(0); }
+  </style>
+</BaseLayout>

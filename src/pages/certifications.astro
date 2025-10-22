@@ -1,0 +1,336 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import CertCard from "../components/CertCard.astro";
+
+/* —— Data (edit as needed) —— */
+/* Logos you’ll add in /public/logos/ */
+const providers = [
+  {
+    key: "comptia",
+    label: "CompTIA",
+    logo: "/images/comptia.png",
+    items: [
+      { title: "ITF+ (CompTIA IT Fundamentals)", 
+      imgSrc: "/certs/ITF.png", 
+      imgAlt: "CompTIA ITF+ certificate", 
+      moreUrl: "https://www.comptia.org/certifications/itf", 
+      summary: "Foundational IT concepts: hardware, software, security, troubleshooting, databases, and basic programming." },
+
+      { title: "A+ (Core 1 & Core 2)", 
+      imgSrc: "/certs/A_Plus.png", 
+      imgAlt: "CompTIA A+ certificate", 
+      moreUrl: "https://www.comptia.org/certifications/a", 
+      summary: "Support, OS, networking, hardware, and troubleshooting skills for technical roles." },
+
+      { title: "Network+", 
+      imgSrc: "/certs/Network_Plus.png", 
+      imgAlt: "CompTIA Network+ certificate", 
+      moreUrl: "https://www.comptia.org/certifications/network", 
+      summary: "Network design, configuration, routing/switching, wireless, security, and troubleshooting." },
+
+      { title: "Security+", 
+      imgSrc: "/certs/Security_Plus.png", 
+      imgAlt: "CompTIA Security+ certificate", 
+      moreUrl: "https://www.comptia.org/certifications/security", 
+      summary: "Core security principles, risk management, identity, cloud, and incident response." },
+    ],
+  },
+  {
+    key: "microsoft",
+    label: "Microsoft",
+    logo: "/images/azure.png",
+    items: [
+      { title: "AZ-900 — Azure Fundamentals", 
+      imgSrc: "/certs/Az_900.png", 
+      imgAlt: "Microsoft AZ-900 certificate", 
+      moreUrl: "https://learn.microsoft.com/credentials/certifications/azure-fundamentals/", 
+      summary: "Azure core services, governance, security, pricing, and cloud concepts." },
+
+      { title: "AZ-104 — Azure Administrator Associate", 
+      imgSrc: "/certs/Az_104.png", 
+      imgAlt: "Microsoft AZ-104 certificate", 
+      moreUrl: "https://learn.microsoft.com/credentials/certifications/azure-administrator/", 
+      summary: "Identity, governance, storage, compute, networking in Azure with automation focus." },
+
+      { title: "AZ-400 — DevOps Engineer Expert", 
+      imgSrc: "/certs/az_400.png", 
+      imgAlt: "Microsoft AZ-400 certificate", 
+      moreUrl: "https://learn.microsoft.com/credentials/certifications/devops-engineer/", 
+      summary: "Focuses on unifying people, process, and technology to deliver continuous value. Covers CI/CD, source control, infrastructure as code, and release strategies in Azure DevOps." },
+    
+      { title: "AZ-204 — Developing Solutions for Microsoft Azure", 
+      imgSrc: "/certs/az_204.png", 
+      imgAlt: "Microsoft AZ-204 certificate", 
+      moreUrl: "https://learn.microsoft.com/credentials/certifications/azure-developer/", 
+      summary: "Validates skills in building, testing, deploying, and maintaining cloud applications and services on Microsoft Azure using SDKs, APIs, and developer tools." },
+    
+      { title: "AZ-305 — Azure Solutions Architect Expert",
+      imgSrc: "/certs/az_305.png", 
+      imgAlt: "Microsoft AZ-305 certificate", 
+      moreUrl: "https://learn.microsoft.com/credentials/certifications/solutions-architect-expert/", 
+      summary: "Focuses on designing secure, scalable, and reliable cloud solutions. Covers governance, identity, networking, storage, and application architecture decisions." },
+
+      { title: "MD-102 — Endpoint Administrator", 
+      imgSrc: "/certs/md_102.png", 
+      imgAlt: "Microsoft MD-102 certificate", 
+      moreUrl: "https://learn.microsoft.com/credentials/certifications/m365-endpoint-administrator/", 
+      summary: "Windows deployment, Intune/UEM, policy, security baselines, and app lifecycle." },
+
+      { title: "MS-102 — Microsoft 365 Administrator",
+      imgSrc: "/certs/ms_102.png", 
+      imgAlt: "Microsoft MS-102 certificate", 
+      moreUrl: "https://learn.microsoft.com/credentials/certifications/m365-administrator/", 
+      summary: "Tenant management, identity, security, compliance, and modern workplace administration." },
+    ],
+  },
+  {
+    key: "cisco",
+    label: "Cisco",
+    logo: "/images/cisco.png",
+    items: [
+      { title: "CCNA — Cisco Certified Network Associate", 
+      imgSrc: "/certs/ccna.png", 
+      imgAlt: "Cisco CCNA certificate", 
+      moreUrl: "https://www.cisco.com/c/en/us/training-events/training-certifications/certifications/associate/ccna.html", 
+      summary: "Networking fundamentals, IP services, security, automation, and programmability." },
+    ],
+  },
+  {
+    key: "amazon",
+    label: "Amazon",
+    logo: "/images/aws.png",
+    items: [
+      { title: "AWS Certified Cloud Practitioner (CLF-C02)", imgSrc: "/certs/aws-clf.png", imgAlt: "AWS Cloud Practitioner certificate", moreUrl: "https://aws.amazon.com/certification/certified-cloud-practitioner/", summary: "Cloud concepts, AWS services, security, pricing, and support at a foundational level." },
+    ],
+  },
+];
+---
+<BaseLayout title="Certifications">
+  <!-- Page-local accent: Royal Electric Blue -->
+  <style is:global>
+    :root { --accent: 0 120 255; } /* rgb(0,120,255) */
+  </style>
+
+  <main class="wrap">
+    <!-- Centered controls -->
+    <div class="controls">
+      <button id="expandAll" class="chip" type="button">Expand all</button>
+      <button id="collapseAll" class="chip" type="button">Collapse all</button>
+    </div>
+
+    <section class="accordions">
+      {providers.map((p) => (
+        <details class="prov" id={p.key} data-key={p.key}>
+          <summary class="prov-head">
+            <span class="title-wrap">
+              {p.logo && <img class="brand" src={p.logo} alt="" aria-hidden="true" />}
+              <span class="label glow">{p.label}</span>
+            </span>
+            <span class="right">
+              <span class="count">{p.items.length}</span>
+              <span class="caret" aria-hidden="true">▾</span>
+            </span>
+          </summary>
+
+          {/* Animated panel wrapper for smooth expand/collapse */}
+          <div class="panel">
+            <div class="grid">
+              {p.items.map((c) => (<CertCard {...c} />))}
+            </div>
+          </div>
+        </details>
+      ))}
+    </section>
+  </main>
+
+  <script is:inline>
+    // Smooth expand/collapse on .panel using height animation
+    const detailsEls = Array.from(document.querySelectorAll(".prov"));
+
+    function animatePanel(detailsEl, open) {
+      const panel = detailsEl.querySelector(".panel");
+      if (!panel) return;
+      const start = panel.offsetHeight;
+      panel.style.height = "auto";
+      const end = panel.offsetHeight;
+      // revert to start, then animate to end
+      panel.style.height = start + "px";
+      requestAnimationFrame(() => {
+        panel.style.height = (open ? end : 0) + "px";
+      });
+    }
+
+    // Hook up toggle animation
+    detailsEls.forEach((d) => {
+      // initialize closed height
+      if (!d.open) {
+        const panel = d.querySelector(".panel");
+        if (panel) panel.style.height = "0px";
+      }
+      d.addEventListener("toggle", () => animatePanel(d, d.open));
+    });
+
+    // Expand/Collapse all with animation
+    const expandAllBtn = document.getElementById("expandAll");
+    const collapseAllBtn = document.getElementById("collapseAll");
+    expandAllBtn?.addEventListener("click", () => {
+      detailsEls.forEach((d) => {
+        if (!d.open) { d.open = true; animatePanel(d, true); }
+      });
+    });
+    collapseAllBtn?.addEventListener("click", () => {
+      detailsEls.forEach((d) => {
+        if (d.open) { animatePanel(d, false); d.open = false; }
+      });
+    });
+
+    // Deep-link support: /certifications#microsoft
+    const hash = location.hash?.slice(1);
+    if (hash) {
+      const target = document.getElementById(hash);
+      if (target?.tagName?.toLowerCase() === "details") {
+        target.open = true;
+        const panel = target.querySelector(".panel");
+        if (panel) panel.style.height = "auto";
+        target.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }
+  </script>
+
+  <style>
+    .wrap{
+      min-height: calc(100dvh - var(--navHeight, 64px));
+      padding: 3rem 1rem 5rem;
+      display:grid; gap:1.25rem;
+      background:
+        radial-gradient(60% 40% at 50% 0%, rgba(var(--accent) / .07), transparent 70%),
+        radial-gradient(40% 30% at 30% 100%, rgba(0,255,200,.03), transparent 70%), /* faint teal depth */
+        radial-gradient(30% 30% at 80% 70%, rgba(0,180,255,.03), transparent 70%);
+    }
+
+    /* Center the controls */
+    .controls{
+      display:flex; justify-content:center; align-items:center; gap:.8rem;
+      width:100%; margin: 0 auto .5rem;
+    }
+    .chip{
+      padding:.65rem 1rem; border-radius:999px; cursor:pointer;
+      border:1px solid rgba(var(--accent) / .35);
+      background: rgba(255 255 255 / .03);
+      color:#EAF3FF;
+      font-family: var(--font-mono,'JetBrains Mono',ui-monospace,monospace);
+      transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease, background .15s ease;
+    }
+    .chip:hover,.chip:focus-visible{
+      transform: translateY(-1px);
+      border-color: rgba(var(--accent) / .85);
+      box-shadow: 0 0 18px rgba(var(--accent) / .25);
+      background: rgba(var(--accent) / .07);
+      outline:none;
+    }
+
+    /* Wider provider boxes */
+    .accordions{
+      width: min(100%, 1060px);
+      margin: 0 auto;
+      display:grid; gap:1rem;
+    }
+
+    .prov{
+      border:1px solid rgba(var(--accent) / .30);
+      border-radius:18px;
+      background: rgba(10,14,16,.55);
+      backdrop-filter: blur(6px);
+      overflow: clip;
+      transition: box-shadow .25s ease, border-color .25s ease, background .25s ease, transform .2s ease;
+      will-change: transform;
+    }
+
+    /* Expand-on-hover for desktop */
+    @media (hover:hover){
+      .prov:hover{
+        transform: translateY(-2px);
+        box-shadow: 0 0 42px rgba(var(--accent) / .12), inset 0 0 20px rgba(0,0,0,.35);
+        border-color: rgba(var(--accent) / .50);
+      }
+    }
+
+    /* Bigger collapsed strip */
+    .prov-head{
+      list-style:none;
+      display:grid;
+      grid-template-columns: 1fr auto;
+      align-items:center; gap:.9rem;
+      padding: 1.25rem 1.4rem;
+      min-height: 84px;
+      cursor:pointer; user-select:none;
+    }
+
+    .title-wrap{ display:flex; align-items:center; gap:.7rem; min-width:0; }
+    .brand{
+      width: 28px; height: 28px; object-fit: contain;
+      filter: drop-shadow(0 0 6px rgba(var(--accent) / .25));
+      opacity:.95;
+    }
+
+    .label{
+      font-weight:800; letter-spacing:.35px;
+      font-family: var(--font-orbitron,'Orbitron',ui-sans-serif,system-ui);
+      font-size: clamp(1.1rem, 0.95rem + 0.8vw, 1.45rem);
+      color:#EAF3FF;
+    }
+
+    /* Gentle fade-in/out glow on the provider title */
+    .glow{
+      text-shadow:
+        0 0 8px rgba(var(--accent) / .35),
+        0 0 16px rgba(var(--accent) / .22);
+      animation: titleGlow 3s ease-in-out infinite;
+    }
+    @keyframes titleGlow{
+      0%   { text-shadow: 0 0 6px rgba(var(--accent)/.22), 0 0 12px rgba(var(--accent)/.12); opacity:.95; }
+      50%  { text-shadow: 0 0 16px rgba(var(--accent)/.55), 0 0 28px rgba(var(--accent)/.30); opacity:1; }
+      100% { text-shadow: 0 0 6px rgba(var(--accent)/.22), 0 0 12px rgba(var(--accent)/.12); opacity:.95; }
+    }
+
+    .right{ display:flex; align-items:center; gap:.6rem; }
+    .count{
+      font-family: var(--font-mono,'JetBrains Mono',ui-monospace,monospace);
+      padding:.25rem .6rem;
+      border:1px solid rgba(var(--accent)/.40);
+      border-radius:999px;
+      background: rgba(255 255 255 / .03);
+      color:#EAF3FF;
+    }
+    .caret{ transition: transform .2s ease; opacity:.9; }
+    .prov[open] .caret{ transform: rotate(180deg); }
+
+    /* Animated panel wrapper */
+    .panel{
+      height: auto;    /* JS sets to 0px when closed */
+      overflow: hidden;
+      transition: height .35s ease;
+    }
+
+    .grid{
+      display:grid; gap:1rem;
+      padding: 0 1rem 1rem;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 640px){  .grid{ grid-template-columns: repeat(2,1fr); } }
+    @media (min-width: 1024px){ .grid{ grid-template-columns: repeat(3,1fr); } }
+
+    /* Keyboard focus ring on summary */
+    .prov-head:focus{ outline:none; }
+    .prov-head:focus-visible{
+      box-shadow: inset 0 0 0 2px rgba(var(--accent)/.75);
+      border-radius:12px;
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      .glow{ animation:none; }
+      .panel{ transition: none; }
+      .prov:hover{ transform:none; }
+    }
+  </style>
+</BaseLayout>

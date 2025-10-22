@@ -1,0 +1,238 @@
+---
+import BitlockerPie from "../../islands/BitlockerPie";
+const days = [
+  { day: 1, encrypted: 12, pending: 38, failed: 0 },
+  { day: 2, encrypted: 28, pending: 22, failed: 0 },
+  { day: 3, encrypted: 42, pending: 7, failed: 1 },
+  { day: 4, encrypted: 48, pending: 1, failed: 1 },
+];
+---
+
+<section class="bitlocker-modal glass-surface">
+  <!-- Top: Deployment Simulation (like CloudLab's Live Status) -->
+  <div class="section-head">
+    <h4 class="section-title">Deployment Simulation</h4>
+  </div>
+
+  <!-- Chart + Animation (now first) -->
+  <BitlockerPie days={days} client:visible />
+
+  <!-- Chart note -->
+  <p class="hint muted">
+    Click <b>Start</b> to simulate Day&nbsp;1 → Day&nbsp;4 rollout. Data shown here
+    mirrors the
+    <code>daily_counts.csv</code> produced by <code>aggregate.ps1</code> (Encrypted
+    / Pending / Error).
+  </p>
+
+  <!-- Project Header -->
+  <header class="head">
+    <h3 class="title">BitLocker Enforcement Pipeline</h3>
+    <span class="muted">Automated Device Encryption &amp; Compliance</span>
+  </header>
+
+  <!-- Project Summary -->
+  <div class="summary">
+    <p>
+      A fully automated PowerShell-driven system that enforces BitLocker
+      encryption and collects telemetry across all domain-joined Windows
+      computers. It ensures every endpoint is encrypted, recovery keys are
+      securely backed up, and compliance metrics are automatically generated for
+      dashboards.
+    </p>
+
+    <ul>
+      <li>
+        <strong>Enforcement Script</strong> (<code
+          >Bitlocker-Enforcement.ps1</code
+        >) runs at startup via GPO or a SYSTEM-level task. It checks each
+        drive’s BitLocker state and:
+        <ul>
+          <li>✅ <em>Encrypted</em> → verifies recovery key exists</li>
+          <li>💤 <em>Suspended</em> → resumes protection</li>
+          <li>
+            ❌ <em>Off</em> → enables BitLocker (XTS-AES256, used-space-only)
+          </li>
+        </ul>
+        Keys are stored in <code
+          >\\fserver\Data\Chicago\IT\Private_IT\Bitlocker\keys\</code
+        > and telemetry JSON is written to <code
+          >\\fserver\...\telemetry\<span class="muted">YYYY-MM</span>\</code
+        >.
+      </li>
+
+      <li>
+        <strong>Aggregation Script</strong> (<code>aggregate.ps1</code>) runs
+        daily to summarize all telemetry JSONs. It counts <em>Encrypted</em>, <em
+          >Pending</em
+        >, and <em>Error</em> states, then updates a
+        <code>daily_counts.csv</code> for visualization.
+      </li>
+
+      <li>
+        <strong>Visualization</strong> is rendered above as a 4-day rollout chart.
+        Each day shows system-wide encryption progress:
+        <em style="color:#16c2c2;">Encrypted</em>,
+        <em style="color:#94a3b8;">Pending</em>, and
+        <em style="color:#fbbf24;">Error</em>.
+      </li>
+    </ul>
+
+    <p>
+      Together, these scripts form a self-healing, policy-driven encryption
+      pipeline that maintains compliance across your Windows fleet while
+      providing transparent encryption telemetry.
+    </p>
+  </div>
+
+  <!-- Example PowerShell snippet (HTML-escaped) -->
+  <div class="codebox">
+    <div class="bar">
+      <span class="dot red"></span>
+      <span class="dot yellow"></span>
+      <span class="dot green"></span>
+      <span class="label">Example Enforcement Logic (PowerShell)</span>
+    </div>
+    <pre><code>
+# Detect drive state and enable BitLocker if missing
+&amp;dollar;vol = Get-BitLockerVolume -MountPoint &quot;C:&quot;
+if (&amp;dollar;vol.ProtectionStatus -eq &#39;Off&#39;) &#123;
+  Enable-BitLocker -MountPoint &quot;C:&quot; -EncryptionMethod XtsAes256 -UsedSpaceOnly
+  Add-BitLockerKeyProtector -MountPoint &quot;C:&quot; -RecoveryPasswordProtector
+  Backup-BitLockerKeyProtector -MountPoint &quot;C:&quot; -RecoveryKeyPath &amp;dollar;keyPath
+&#125;
+    </code></pre>
+  </div>
+</section>
+
+<style>
+  .bitlocker-modal {
+    border-radius: 18px;
+    padding: 20px;
+    display: grid;
+    gap: 16px;
+    background: radial-gradient(
+      120% 120% at 0% 0%,
+      rgba(0, 40, 48, 0.35) 0%,
+      rgba(0, 14, 18, 0.55) 60%,
+      rgba(0, 10, 14, 0.7) 100%
+    );
+    border: 1px solid rgba(0, 255, 255, 0.18);
+    box-shadow:
+      0 0 35px rgba(0, 255, 255, 0.1),
+      inset 0 0 1px rgba(255, 255, 255, 0.05);
+  }
+
+  /* top section title (CloudLab “Live Status” vibe) */
+  .section-head {
+    margin-bottom: -2px;
+  }
+  .section-title {
+    font-family: Orbitron, system-ui, sans-serif;
+    color: #9bdcff;
+    letter-spacing: 0.06em;
+    font-size: 0.95rem;
+    text-shadow: 0 0 10px rgba(0, 200, 255, 0.25);
+    margin: 0;
+  }
+
+  .head {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-top: 6px;
+  }
+  .title {
+    font-family: Orbitron, system-ui, sans-serif;
+    letter-spacing: 0.06em;
+    font-size: 1.05rem;
+    color: #9bdcff;
+    text-shadow: 0 0 10px rgba(0, 200, 255, 0.25);
+    margin: 0;
+  }
+
+  .summary {
+    font-family:
+      JetBrains Mono,
+      ui-monospace;
+    font-size: 13px;
+    color: rgba(210, 240, 250, 0.9);
+    line-height: 1.55;
+  }
+  .summary ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 8px 0 10px;
+  }
+  .summary ul li {
+    margin-bottom: 10px;
+  }
+  .summary ul li strong {
+    color: #9bdcff;
+  }
+  .summary code {
+    background: rgba(0, 255, 255, 0.05);
+    border: 1px solid rgba(0, 255, 255, 0.15);
+    border-radius: 6px;
+    padding: 2px 6px;
+    font-size: 12px;
+    color: #b7ecff;
+  }
+
+  .hint {
+    margin-top: -6px;
+  }
+  .muted {
+    color: rgba(200, 230, 240, 0.75);
+  }
+
+  /* code snippet styling */
+  .codebox {
+    background: #0a161a;
+    border: 1px solid rgba(0, 255, 255, 0.15);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 0 25px rgba(0, 255, 255, 0.08);
+  }
+  .bar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(0, 30, 35, 0.7);
+    padding: 4px 10px;
+    border-bottom: 1px solid rgba(0, 255, 255, 0.12);
+  }
+  .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+  .red {
+    background: #ff5f56;
+  }
+  .yellow {
+    background: #ffbd2e;
+  }
+  .green {
+    background: #27c93f;
+  }
+  .label {
+    font-size: 12px;
+    color: rgba(180, 230, 255, 0.8);
+    margin-left: 4px;
+  }
+  pre {
+    margin: 0;
+    padding: 10px 14px;
+    font-family:
+      JetBrains Mono,
+      ui-monospace;
+    font-size: 13px;
+    color: #c8faff;
+    background: linear-gradient(
+      180deg,
+      rgba(0, 15, 18, 0.6),
+      rgba(0, 25, 30, 0.5)
+    );
+  }
+</style>

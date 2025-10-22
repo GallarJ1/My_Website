@@ -1,0 +1,85 @@
+---
+/* RotatingTypewriter.astro — framework-free, pure JS in <script> */
+
+export interface Props {
+  roles: string[];
+  typeSpeed?: number;    // ms per character typed
+  deleteSpeed?: number;  // ms per character deleted
+  holdTime?: number;     // ms to hold word before delete
+}
+
+const {
+  roles,
+  typeSpeed = 55,
+  deleteSpeed = 40,
+  holdTime = 900,
+} = Astro.props;
+
+const uid = `tw-${Math.random().toString(36).slice(2, 9)}`;
+---
+
+<span id={uid} class="tw-text" aria-live="polite"></span>
+<span class="caret" aria-hidden="true"></span>
+
+<style>
+  .caret {
+    display:inline-block;
+    width:1ch;
+    margin-left:2px;
+    border-right:2px solid currentColor;
+    animation: blink 1s step-end infinite;
+  }
+  @keyframes blink { 50% { border-color: transparent; } }
+</style>
+
+<!-- Pure JS; values injected via define:vars -->
+<script define:vars={{ uid, roles, typeSpeed, deleteSpeed, holdTime }}>
+  // If your workspace forces TS checks on JS, you can also uncomment:
+  // // @ts-nocheck
+
+  /** @type {HTMLElement|null} */
+  const el = document.getElementById(uid);
+  if (!el) {
+    console.warn("RotatingTypewriter: target not found", uid);
+  } else {
+    let i = 0;
+    let txt = "";
+    /** @type {'type'|'hold'|'delete'} */
+    let mode = "type";
+
+    /** @param {number} ms */
+    const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+    async function loop() {
+      /** @type {string[]} */
+      const list = roles;
+      const word = list[i % list.length];
+
+      if (mode === "type") {
+        txt = word.slice(0, txt.length + 1);
+        el.textContent = txt;
+
+        if (txt === word) {
+          mode = "hold";
+          await sleep(holdTime);
+          mode = "delete";
+        } else {
+          await sleep(typeSpeed);
+        }
+      } else if (mode === "delete") {
+        txt = txt.slice(0, -1);
+        el.textContent = txt;
+
+        if (txt.length === 0) {
+          i++;
+          mode = "type";
+        }
+        await sleep(deleteSpeed);
+      }
+
+      requestAnimationFrame(loop);
+    }
+
+    loop();
+  }
+</script>

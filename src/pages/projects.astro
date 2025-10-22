@@ -1,0 +1,150 @@
+---
+import CloudLabModal from "../components/projects/CloudLabModal.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import TerminalIntro from "../components/Terminal_Intro.astro";
+import ProjectCard from "../components/ProjectCard.astro";
+import ModalShell from "../components/ModalShell.astro";
+import BitlockerModal from "../components/projects/BitlockerModal.astro";
+
+const projects = [
+  {
+    id: "cloudlab",
+    title: "Terraform CloudLab",
+    thumb: "/images/Cover/CloudLab.png",
+  },
+  {
+    id: "autoforge",
+    title: "AutoForge",
+    thumb: "/images/projects/autoforge-thumb.webp",
+  },
+  {
+    id: "bitlocker",
+    title: "BitLocker Enforcement",
+    thumb: "/images/Cover/Bitlocker.png",
+  },
+  {
+    id: "chatops",
+    title: "ChatOps Agent",
+    thumb: "/images/projects/chatops-thumb.webp",
+  },
+];
+---
+
+<BaseLayout title="Projects">
+  <TerminalIntro title="Welcome to my Projects" />
+
+  <section class="projects-grid" aria-label="Projects">
+    {
+      projects.map((p) => (
+        <ProjectCard id={p.id} title={p.title} thumb={p.thumb} />
+      ))
+    }
+  </section>
+
+  <div id="modal-root" hidden>
+    <!-- CloudLab -->
+    <div class="modal-wrap" data-modal="cloudlab" hidden>
+      <ModalShell
+        title="CloudLab Project"
+        tagline="Production-ready Azure backend API"
+      >
+        <CloudLabModal />
+      </ModalShell>
+    </div>
+
+    <!-- AutoForge (placeholder for now) -->
+    <div class="modal-wrap" data-modal="autoforge" hidden>
+      <ModalShell
+        title="AutoForge"
+        tagline="CI/CD that tests, builds, ships a container"
+      >
+        <p>AutoForge modal content will go here. (We’ll build this next.)</p>
+      </ModalShell>
+    </div>
+
+    <!-- BitLocker (placeholder) -->
+    <div class="modal-wrap" data-modal="bitlocker" hidden>
+      <ModalShell
+        title="BitLocker Enforcement"
+        tagline="Hands-off device encryption with audit-ready reporting"
+      >
+        <BitlockerModal />
+      </ModalShell>
+    </div>
+
+    <!-- ChatOps (placeholder) -->
+    <div class="modal-wrap" data-modal="chatops" hidden>
+      <ModalShell
+        title="ChatOps Agent"
+        tagline="AI that explains failing builds and recommends fixes"
+      >
+        <p>ChatOps modal content will go here.</p>
+      </ModalShell>
+    </div>
+  </div>
+
+  <script>
+    // @ts-nocheck
+    const grid = document.querySelector(".projects-grid");
+    const root = document.getElementById("modal-root");
+
+    function showModal(id) {
+      if (!root) return;
+      root.hidden = false;
+      document.body.style.overflow = "hidden";
+      // hide all
+      root.querySelectorAll(".modal-wrap").forEach((el) => {
+        el.hidden = true;
+      });
+      // show selected
+      const target = root.querySelector(`.modal-wrap[data-modal="${id}"]`);
+      if (target) target.hidden = false;
+    }
+
+    function closeAll() {
+      if (!root) return;
+      root.hidden = true;
+      document.body.style.overflow = "";
+      root.querySelectorAll(".modal-wrap").forEach((el) => {
+        el.hidden = true;
+      });
+    }
+
+    grid?.addEventListener("click", (ev) => {
+      const t = ev.target;
+      if (!(t instanceof Element)) return;
+      const card = t.closest(".card");
+      if (!card) return;
+      showModal(card.id);
+    });
+
+    document
+      .querySelectorAll("[data-close]")
+      .forEach((btn) => btn.addEventListener("click", closeAll));
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && root && !root.hidden) closeAll();
+    });
+    document
+      .querySelectorAll(".overlay")
+      .forEach((el) => el.addEventListener("click", closeAll));
+  </script>
+
+  <style>
+    .projects-grid {
+      max-width: 1200px;
+      margin: 24px auto 64px;
+      padding: 0 16px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(260px, 1fr));
+      gap: clamp(16px, 2.8vw, 28px);
+      justify-items: stretch;
+    }
+
+    @media (max-width: 860px) {
+      .projects-grid {
+        grid-template-columns: 1fr;
+        max-width: 720px;
+      }
+    }
+  </style>
+</BaseLayout>

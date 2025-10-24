@@ -5,6 +5,7 @@ import TerminalIntro from "../components/Terminal_Intro.astro";
 import ProjectCard from "../components/ProjectCard.astro";
 import ModalShell from "../components/ModalShell.astro";
 import BitlockerModal from "../components/projects/BitlockerModal.astro";
+import AutoForgeModal from "../components/projects/AutoForgeModal.astro";
 
 const projects = [
   {
@@ -14,8 +15,8 @@ const projects = [
   },
   {
     id: "autoforge",
-    title: "AutoForge",
-    thumb: "/images/projects/autoforge-thumb.webp",
+    title: "CI/CD AutoForge AI",
+    thumb: "/images/Cover/Autoforge.png",
   },
   {
     id: "bitlocker",
@@ -33,7 +34,7 @@ const projects = [
 <BaseLayout title="Projects">
   <TerminalIntro title="Welcome to my Projects" />
 
-  <section class="projects-grid" aria-label="Projects">
+  <section id="projects" class="projects-grid" aria-label="Projects">
     {
       projects.map((p) => (
         <ProjectCard id={p.id} title={p.title} thumb={p.thumb} />
@@ -45,7 +46,7 @@ const projects = [
     <!-- CloudLab -->
     <div class="modal-wrap" data-modal="cloudlab" hidden>
       <ModalShell
-        title="CloudLab Project"
+        title="Terraform CloudLab"
         tagline="Production-ready Azure backend API"
       >
         <CloudLabModal />
@@ -55,10 +56,10 @@ const projects = [
     <!-- AutoForge (placeholder for now) -->
     <div class="modal-wrap" data-modal="autoforge" hidden>
       <ModalShell
-        title="AutoForge"
-        tagline="CI/CD that tests, builds, ships a container"
+        title="CI/CD AutoForge AI"
+        tagline="self-deploying GPT backend built with FastAPI, Docker, and Azure automation"
       >
-        <p>AutoForge modal content will go here. (We’ll build this next.)</p>
+        <AutoForgeModal />
       </ModalShell>
     </div>
 

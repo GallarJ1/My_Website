@@ -1,261 +1,139 @@
 ---
-import CloudLabPanel from "../../islands/CloudLabPanel.tsx";
-const API_URL = import.meta.env.PUBLIC_CLOUDLAB_API;
-const ARCH_IMG = "/images/Diagrams/Cloud Diagram.svg"; // keep as-is for now
-const API_BASE = "https://app-mylab-dev-api.azurewebsites.net";
+import CloudLabPanel from "../../islands/CloudLabPanel";
+
+const API_URL = "https://app-mylab-dev-api.azurewebsites.net/api/health";
+const ARCH_IMG = "/images/Diagrams/Cloud Diagram.svg";
 ---
 
-<section class="wrap" aria-label="MyLab API — Project details">
-  <!-- Overview -->
-  <div class="section">
-    <h4>Overview</h4>
-    <p>
-      <strong>MyLab API</strong> is a Node.js + Express backend that powers my Astro
-      portfolio with live, dynamic data. Beyond the API itself, I provisioned the
-      entire Azure environment with <strong>Terraform (AzureRM)</strong>,
-      configured environment variables for security, and set the foundation for
-      CI/CD. It’s a compact demonstration of <strong>backend engineering</strong
-      >, <strong>infrastructure as code</strong>, <strong
-        >cloud deployment</strong
-      >, and <strong>frontend integration</strong> — end to end.
-    </p>
-  </div>
+<section class="wrap">
+  <header class="head">
+    <h3 class="title">CloudLab — Azure App Service API</h3>
+    <span class="muted">Express on Azure · Terraform · Secure App Settings</span
+    >
+  </header>
 
-  <!-- Live Status (React island) -->
+  <!-- Interaction (match BitLocker/AutoForge) -->
   <div class="section">
-    <h4>Live Status</h4>
+    <h4>Interaction Window</h4>
+    <!-- ⬇️ No extra terminal-bar here; CloudLabPanel draws its own header -->
     <CloudLabPanel apiUrl={API_URL} client:visible />
   </div>
 
-  <!-- Architecture / Diagram -->
+  <div class="section">
+    <h4>Project Summary</h4>
+    <ul class="bullets">
+      <li>
+        <strong>Backend:</strong> Node.js <em>Express</em> API with routes for
+        <code>/api/health</code>, <code>/api/version</code>, and telemetry
+        endpoints for portfolio data.
+      </li>
+      <li>
+        <strong>Hosting:</strong> Azure App Service (Windows) managed through an
+        App Service Plan. Environment variables define SQL connections and app secrets.
+      </li>
+      <li>
+        <strong>Security:</strong> CORS allowlist + API key header for sensitive
+        routes. App settings stored in Azure’s configuration, never in code.
+      </li>
+      <li>
+        <strong>Infrastructure:</strong> Deployed via <em
+          >Terraform (AzureRM)</em
+        > — resource groups, plans, and apps are declared as code for full reproducibility.
+      </li>
+      <li>
+        <strong>Monitoring &amp; Maintenance:</strong> Azure Kudu for console access
+        and live log streaming with <code>az webapp log tail</code>.
+      </li>
+    </ul>
+  </div>
+
   <figure class="figure">
     <img
       src={ARCH_IMG}
-      alt="Architecture: Azure App Service running the MyLab Express API with environment settings and REST endpoints"
+      alt="Azure App Service architecture for CloudLab API"
       loading="lazy"
     />
-    <figcaption>
-      Architecture: Azure App Service (Express API) + environment variables +
-      REST endpoints.
+    <figcaption class="muted">
+      Azure App Service hosting the Node.js Express API with Terraform-defined
+      infrastructure.
     </figcaption>
   </figure>
-
-  <!-- IaC: Terraform -->
-  <div class="section">
-    <h4>Infrastructure as Code (Terraform + AzureRM)</h4>
-    <p>
-      I provisioned Azure resources as code so the environment is <em
-        >reproducible</em
-      >, <em>version-controlled</em>, and easy to evolve. Core resources include
-      a Resource Group, App Service Plan, and App Service hosting the API.
-    </p>
-
-    <pre
-      class="code"
-      aria-label="Terraform snippet">{`
-  provider "azurerm" { features {} }
-
-  resource "azurerm_resource_group" "mylab" {
-    name     = "MyLab-RG"
-    location = "East US"
-  }
-
-  resource "azurerm_app_service_plan" "plan" {
-    name                = "MyLabPlan"
-    location            = azurerm_resource_group.mylab.location
-    resource_group_name = azurerm_resource_group.mylab.name
-    sku { tier = "Basic" size = "B1" }
-  }
-
-  resource "azurerm_app_service" "api" {
-    name                = "app-mylab-dev-api"
-    location            = azurerm_resource_group.mylab.location
-    resource_group_name = azurerm_resource_group.mylab.name
-    app_service_plan_id = azurerm_app_service_plan.plan.id
-    site_config { node_version = "~18" }
-    app_settings = { NODE_ENV = "Production", WEBSITE_NODE_DEFAULT_VERSION = "~18" }
-  }
-    `}</pre>
-
-    <p class="muted">
-      Applied via <code>terraform init</code> → <code>terraform plan</code> → <code
-        >terraform apply</code
-      > to create the environment in minutes.
-    </p>
-  </div>
-
-  <!-- Backend Layer -->
-  <div class="section">
-    <h4>Backend layer (Express API)</h4>
-    <pre
-      class="tree"
-      aria-label="Folder tree">
-MyLab-API/
-├─ server.js         ← Express app (routes, middleware, error handling)
-├─ index.cjs         ← ESM bootstrap for Azure/iisnode
-├─ web.config        ← iisnode routing & handlers
-├─ package.json      ← dependencies & scripts
-└─ api.zip           ← deployment artifact (zip-deploy)
-    </pre>
-
-    <table class="table">
-      <thead
-        ><tr><th>Endpoint</th><th>Purpose</th><th>Description</th></tr></thead
-      >
-      <tbody>
-        <tr
-          ><td><code>/api/health</code></td><td>Health check</td><td
-            >Returns status and UTC timestamp.</td
-          ></tr
-        >
-        <tr
-          ><td><code>/api/version</code></td><td>Version info</td><td
-            >Reads <code>APP_VERSION</code> from env settings.</td
-          ></tr
-        >
-        <tr
-          ><td><code>/api/portfolio</code></td><td>Portfolio data</td><td
-            >Serves JSON used by the Astro site.</td
-          ></tr
-        >
-        <tr
-          ><td><code>/api/admin/update</code></td><td>Protected</td><td
-            >Requires <code>x-api-key</code> (future automation hook).</td
-          ></tr
-        >
-      </tbody>
-    </table>
-
-    <p class="muted">
-      Security & ops middleware: <strong>Helmet</strong> (headers), <strong
-        >CORS</strong
-      > (allowed origins), <strong>rate limiting</strong>, <strong
-        >morgan</strong
-      > (logs), <strong>express.json</strong> (body parsing), and a global error
-      handler.
-    </p>
-  </div>
-
-  <!-- Deployment Workflow -->
-  <div class="section">
-    <h4>Deployment workflow (CLI)</h4>
-    <p>
-      With infra in place, I packaged and shipped the API via Azure CLI
-      zip-deploy, then verified the live health endpoint.
-    </p>
-    <div class="codegrid">
-      <div>
-        <h5>Zip & deploy</h5>
-        <pre
-          class="code">Compress-Archive -Path .\* -DestinationPath .\api.zip -Force
-az webapp deploy -g MyLab-RG -n app-mylab-dev-api --src-path .\api.zip --type zip</pre>
-      </div>
-      <div>
-        <h5>Verify</h5>
-        <pre class="code">Invoke-WebRequest {API_BASE}/api/health</pre>
-      </div>
-    </div>
-    <p class="muted">Live base URL: <code>{API_BASE}</code></p>
-  </div>
-
-  <!-- Version Control & CI/CD -->
-  <div class="section">
-    <h4>Version control & CI/CD</h4>
-    <ul class="bullets">
-      <li>
-        Repo initialized with clear structure, scripts, and <code
-          >.gitignore</code
-        >.
-      </li>
-      <li>
-        Planned GitHub Actions workflow to build & deploy on <code>main</code> pushes.
-      </li>
-      <li>
-        Terraform + API code can live together or as separate repos for clean
-        lifecycles.
-      </li>
-    </ul>
-  </div>
-
-  <!-- Frontend Integration -->
-  <div class="section">
-    <h4>Frontend integration (Astro)</h4>
-    <p>
-      The Astro site fetches from the API to render live portfolio data (skills,
-      timestamps, counts, etc.).
-    </p>
-    <pre
-      class="code">const res = await fetch("{API_BASE}/api/portfolio");
-const data = await res.json();</pre>
-    <p class="muted">
-      Ensure your Astro origins are added to <code>ALLOWED_ORIGINS</code> in App
-      Service settings for CORS.
-    </p>
-  </div>
-
-  <!-- Key info -->
-  <div class="section">
-    <h4>Key info</h4>
-    <table class="table compact">
-      <tbody>
-        <tr><td>API Base URL</td><td><code>{API_BASE}</code></td></tr>
-        <tr><td>Health</td><td><code>/api/health</code></td></tr>
-        <tr><td>Portfolio</td><td><code>/api/portfolio</code></td></tr>
-        <tr
-          ><td>Secure route</td><td
-            ><code>/api/admin/update</code> (requires <code>x-api-key</code
-            >)</td
-          ></tr
-        >
-        <tr
-          ><td>Env vars</td><td
-            ><code>NODE_ENV</code>, <code>APP_VERSION</code>, <code
-              >ADMIN_API_KEY</code
-            >, <code>ALLOWED_ORIGINS</code>, <code
-              >WEBSITE_NODE_DEFAULT_VERSION</code
-            ></td
-          ></tr
-        >
-      </tbody>
-    </table>
-  </div>
-
-  <!-- Demonstrates -->
-  <div class="section">
-    <h4>What this demonstrates</h4>
-    <ul class="bullets">
-      <li>
-        Full cloud provisioning with <strong>Terraform + AzureRM</strong>.
-      </li>
-      <li>
-        Secure, production-ready <strong>Express.js</strong> backend design.
-      </li>
-      <li>Azure App Service deployment & environment configuration.</li>
-      <li>CI/CD readiness and Git-based workflows.</li>
-      <li>Backend–frontend integration via RESTful JSON APIs.</li>
-      <li>End-to-end DevOps thinking: infra → app → deploy → integrate.</li>
-    </ul>
-  </div>
 </section>
 
 <style>
+  /* === Unified Neon Glass Design (matches BitLocker & AutoForge) === */
   .wrap {
     display: grid;
     gap: 18px;
+    padding: 22px;
+    border-radius: 18px;
+    background: radial-gradient(
+      120% 120% at 0% 0%,
+      rgba(0, 40, 48, 0.35) 0%,
+      rgba(0, 14, 18, 0.55) 60%,
+      rgba(0, 10, 14, 0.7) 100%
+    );
+    border: 1px solid rgba(0, 255, 255, 0.18);
+    box-shadow:
+      0 0 35px rgba(0, 255, 255, 0.1),
+      inset 0 0 1px rgba(255, 255, 255, 0.05);
   }
+
+  /* Header */
+  .head {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+  .title {
+    font-family: Orbitron, system-ui, sans-serif;
+    letter-spacing: 0.06em;
+    font-size: 1.05rem;
+    color: #9bdcff;
+    text-shadow: 0 0 10px rgba(0, 200, 255, 0.25);
+    margin: 0;
+  }
+  .muted {
+    color: rgba(200, 230, 240, 0.75);
+  }
+  .hint {
+    margin-top: -4px;
+  }
+
+  /* Section headings (same as other modals) */
   .section h4 {
-    margin: 6px 0 6px;
-    font-weight: 800;
-    letter-spacing: 0.2px;
+    font-family: Orbitron, system-ui, sans-serif;
+    color: #9bdcff;
+    text-shadow: 0 0 10px rgba(0, 200, 255, 0.25);
+    letter-spacing: 0.06em;
+    font-weight: 600;
+    margin: 8px 0 6px;
+  }
+
+  /* Body text */
+  .section p,
+  .section li {
+    font-family: "JetBrains Mono", monospace;
+    color: rgba(210, 240, 250, 0.9);
+    font-size: 13px;
+    line-height: 1.6;
   }
   .bullets {
     margin: 0;
     padding-left: 18px;
   }
-  .muted {
-    opacity: 0.85;
+
+  /* Inline code blocks */
+  code {
+    background: rgba(0, 255, 255, 0.05);
+    border: 1px solid rgba(0, 255, 255, 0.15);
+    border-radius: 6px;
+    padding: 2px 6px;
+    font-size: 12px;
+    color: #b7ecff;
   }
 
+  /* Figure styling */
   .figure img {
     width: 100%;
     height: auto;
@@ -266,56 +144,6 @@ const data = await res.json();</pre>
   .figure figcaption {
     margin-top: 6px;
     font-size: 0.9rem;
-    color: #cbd5e1;
-  }
-
-  .tree {
-    background: #0b0e12;
-    color: #e6e6e6;
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: 12px;
-    padding: 12px;
-    overflow-x: auto;
-  }
-
-  .code,
-  pre.code {
-    background: #0b0e12;
-    color: #e6e6e6;
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: 12px;
-    padding: 12px;
-    overflow-x: auto;
-  }
-
-  .codegrid {
-    display: grid;
-    gap: 12px;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  @media (max-width: 860px) {
-    .codegrid {
-      grid-template-columns: 1fr;
-    }
-  }
-
-  .table {
-    width: 100%;
-    border-collapse: collapse;
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: 12px;
-    overflow: hidden;
-  }
-  .table th,
-  .table td {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-    padding: 8px 10px;
-    text-align: left;
-  }
-  .table tr:last-child td {
-    border-bottom: none;
-  }
-  .compact td {
-    padding: 6px 10px;
+    color: rgba(200, 230, 240, 0.75);
   }
 </style>

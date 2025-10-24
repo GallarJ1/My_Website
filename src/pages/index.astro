@@ -1,15 +1,12 @@
 ---
-import BaseLayout from "../layouts/BaseLayout.astro"
+import BaseLayout from "../layouts/BaseLayout.astro";
 //import Nav from "../components/Nav.astro";
 import RotatingTypewriter from "../components/RotatingTypewriter.astro";
 
-const roles = [
-  "Systems & Cloud Engineer",
-  "DevOps & Automation Specialist"
-];
+const roles = ["Systems & Cloud Engineer", "DevOps & Automation Specialist"];
 ---
-<BaseLayout title="Jeremy — Home">
 
+<BaseLayout title="Jeremy — Home">
   <main class="container hero">
     <div class="kicker">WELCOME</div>
     <h1 class="hi">Hi, I'm Jeremy,</h1>
@@ -19,11 +16,17 @@ const roles = [
     </h2>
 
     <p class="sub">
-      I transform complex infrastructure into secure, scalable solutions - streamlining systems, automating
-	  workflows, and blending system administration, DevOps, and cloud engineering to power the next
-	  generation of business innovation.
+      I transform complex infrastructure into secure, scalable solutions -
+      streamlining systems, automating workflows, and blending system
+      administration, DevOps, and cloud engineering to power the next generation
+      of business innovation.
     </p>
 
-    <a class="cta" href="/projects">SEE MY PROJECTS</a>
+    <a
+      class="cta"
+      href="https://github.com/GallarJ1/My_Website"
+      target="_blank"
+      rel="noopener noreferrer">SEE MY WEBSITES SOURCE CODE</a
+    >
   </main>
 </BaseLayout>

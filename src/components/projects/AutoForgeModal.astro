@@ -1,0 +1,155 @@
+---
+import AutoForgeTerminal from "../../islands/AutoForgeTerminal";
+
+// ⬅️ Set this to your FastAPI chat endpoint
+const API_URL =
+  "https://autoforge-api-cqhebzf2dwh0cef7.centralus-01.azurewebsites.net/ai/chat";
+---
+
+<section class="autoforge glass-surface">
+  <header class="head">
+    <h3 class="title">AutoForge — GPT Backend &amp; Azure CI/CD</h3>
+    <span class="muted"
+      >FastAPI on Azure · GitHub Actions · Service Principal Auth · Docker</span
+    >
+  </header>
+
+  <!-- Live interaction (like CloudLab terminal) -->
+  <div class="section-head">
+    <h4 class="section-title">Interaction Window</h4>
+  </div>
+  <AutoForgeTerminal apiUrl={API_URL} client:visible />
+  <p class="hint muted">
+    Type a question and hit <b>Send</b>. Requests route Astro → AutoForge API
+    (FastAPI) → Azure OpenAI.
+    <br />For security and cost control, this demo is <strong
+      >rate-limited to 3 requests per hour per IP.
+      <br /> Token limit is set to 6000, use for Short Reasoning only!</strong
+    >
+  </p>
+
+  <!-- Curated, concise project summary -->
+  <div class="summary">
+    <ul>
+      <li>
+        <strong>Backend:</strong>
+        <em>FastAPI</em> exposes <code>/ai/chat</code> for GPT-style replies. Config
+        via env vars:
+        <code>AZURE_OPENAI_KEY</code>, <code>AZURE_OPENAI_ENDPOINT</code>, <code
+          >AZURE_OPENAI_DEPLOYMENT</code
+        >, <code>AZURE_OPENAI_API_VERSION</code>.
+      </li>
+
+      <li>
+        <strong>Hosting:</strong> Azure App Service (Linux, F1 Free). Oryx auto-builds
+        from <code>requirements.txt</code>; custom startup:
+        <code>python -m uvicorn app.main:app --host 0.0.0.0 --port $PORT</code>.
+      </li>
+
+      <li>
+        <strong>CI/CD:</strong> GitHub Actions using <em>Service Principal</em> (token-based)
+        via <code>azure/login</code> → <code>azure/webapps-deploy</code>,
+        replacing publish-profile auth. SP is scoped to the resource group.
+      </li>
+
+      <li>
+        <strong>Local &amp; Cloud Testing with Docker:</strong> The app is containerized
+        for parity between dev and CI. The workflow (<code>ci.yml</code>) builds
+        the image on every push (via <code>docker/build-push-action@v6</code>),
+        runs tests in-container (pytest with a mocked AI client), and on <em
+          >main</em
+        > merges can push to GHCR. Reproduce locally:
+        <code>docker build -t autoforge-ai .</code> then <code
+          >docker run -p 8000:8000 autoforge-ai</code
+        > → open <code>http://localhost:8000</code>.
+      </li>
+
+      <li>
+        <strong>Security:</strong> CORS allowlist (<code
+          >jeremygallardo.com</code
+        >, <code>localhost:4321</code>), secrets in Azure App Settings + GitHub
+        Secrets.
+      </li>
+
+      <li>
+        <strong>Astro Integration:</strong> The site sends a POST to <code
+          >/ai/chat</code
+        > with a messages array, and renders the JSON reply in a chat UI — the terminal
+        above uses the same flow.
+      </li>
+    </ul>
+  </div>
+</section>
+
+<style>
+  .autoforge {
+    border-radius: 18px;
+    padding: 20px;
+    display: grid;
+    gap: 16px;
+    background: radial-gradient(
+      120% 120% at 0% 0%,
+      rgba(0, 40, 48, 0.35) 0%,
+      rgba(0, 14, 18, 0.55) 60%,
+      rgba(0, 10, 14, 0.7) 100%
+    );
+    border: 1px solid rgba(0, 255, 255, 0.18);
+    box-shadow:
+      0 0 35px rgba(0, 255, 255, 0.1),
+      inset 0 0 1px rgba(255, 255, 255, 0.05);
+  }
+  .head {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+  .title {
+    font-family: Orbitron, system-ui, sans-serif;
+    letter-spacing: 0.06em;
+    font-size: 1.05rem;
+    color: #9bdcff;
+    text-shadow: 0 0 10px rgba(0, 200, 255, 0.25);
+    margin: 0;
+  }
+  .section-head {
+    margin-top: 4px;
+  }
+  .section-title {
+    font-family: Orbitron, system-ui, sans-serif;
+    color: #9bdcff;
+    letter-spacing: 0.06em;
+    font-size: 0.95rem;
+    margin: 0;
+    text-shadow: 0 0 10px rgba(0, 200, 255, 0.25);
+  }
+  .summary {
+    font-family:
+      JetBrains Mono,
+      ui-monospace;
+    font-size: 13px;
+    color: rgba(210, 240, 250, 0.9);
+    line-height: 1.55;
+  }
+  .summary ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 4px 0 0;
+  }
+  .summary li {
+    margin: 8px 0;
+  }
+  .summary code {
+    background: rgba(0, 255, 255, 0.05);
+    border: 1px solid rgba(0, 255, 255, 0.15);
+    border-radius: 6px;
+    padding: 2px 6px;
+    font-size: 12px;
+    color: #b7ecff;
+  }
+  .hint {
+    margin-top: -4px;
+  }
+  .muted {
+    color: rgba(200, 230, 240, 0.75);
+  }
+</style>

@@ -8,7 +8,9 @@ interface Props {
   title?: string;
   ascii?: string;
 }
-const { title = "Welcome to my Projects", ascii = `
+const {
+  title = "Welcome to my Projects",
+  ascii = `
 __          __  _                            _                            _____           _           _       
  \\ \\        / / | |                          | |                          |  __ \\         (_)         | |      
   \\ \\  /\\  / /__| | ___ ___  _ __ ___   ___  | |_ ___    _ __ ___  _   _  | |__) | __ ___  _  ___  ___| |_ ___ 
@@ -17,7 +19,8 @@ __          __  _                            _                            _____ 
      \\/  \\/ \\___|_|\\___\\___/|_| |_| |_|\\___|  \\__\\___/  |_| |_| |_|\\__, | |_|   |_|  \\___/| |\\___|\\___|\\__|___/
                                                                     __/ |                _/ |                  
                                                                    |___/                |__/                   
-` } = Astro.props as Props;
+`,
+} = Astro.props as Props;
 ---
 
 <section class="terminal-hero" aria-labelledby="projects-terminal-title">
@@ -25,21 +28,44 @@ __          __  _                            _                            _____ 
   <div class="terminal">
     <pre class="ascii" aria-hidden="true">{ascii}</pre>
     <div class="console" aria-live="polite" aria-atomic="true">
-      <div class="line" id="init-line">&gt; <span>Initializing</span><span id="dots" aria-hidden="true"></span></div>
-      <div class="line ready" id="ready-line" hidden>&gt; <span class="k">Ready.</span></div>
+      <div class="line" id="init-line">
+        &gt; <span>Initializing</span><span id="dots" aria-hidden="true"></span>
+      </div>
+      <div class="line ready" id="ready-line" hidden>
+        &gt; <span class="k">Ready.</span>
+      </div>
     </div>
+    <a
+      class="see-more"
+      href="https://github.com/GallarJ1?tab=repositories"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="See more projects"
+    >
+      See more projects →
+    </a>
   </div>
 </section>
 
 <style>
   :root {
-    --neon-cyan: #00E5FF;
-    --neon-green: #39FF14;
-    --terminal-text: #E6E6E6;
-    --terminal-bg: #0B0E12;
+    --neon-cyan: #00e5ff;
+    --neon-green: #39ff14;
+    --terminal-text: #e6e6e6;
+    --terminal-bg: #0b0e12;
     --terminal-border: rgba(0, 229, 255, 0.35);
   }
-  .sr-only { position: absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,1px,1px); white-space:nowrap; border:0; }
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 1px, 1px);
+    white-space: nowrap;
+    border: 0;
+  }
 
   .terminal-hero {
     width: 100%;
@@ -55,14 +81,28 @@ __          __  _                            _                            _____ 
     border-radius: 18px;
     padding: clamp(16px, 3vw, 32px);
     position: relative;
-    box-shadow: 0 0 0px rgba(0,0,0,0.2), 0 0 28px rgba(0, 229, 255, 0.08);
+    box-shadow:
+      0 0 0px rgba(0, 0, 0, 0.2),
+      0 0 28px rgba(0, 229, 255, 0.08);
     animation: framePulse 4.5s ease-in-out infinite;
   }
 
   @keyframes framePulse {
-    0%   { box-shadow: 0 0 0px rgba(0,0,0,0.2), 0 0 22px rgba(0, 229, 255, 0.06); }
-    50%  { box-shadow: 0 0 0px rgba(0,0,0,0.2), 0 0 34px rgba(0, 229, 255, 0.12); }
-    100% { box-shadow: 0 0 0px rgba(0,0,0,0.2), 0 0 22px rgba(0, 229, 255, 0.06); }
+    0% {
+      box-shadow:
+        0 0 0px rgba(0, 0, 0, 0.2),
+        0 0 22px rgba(0, 229, 255, 0.06);
+    }
+    50% {
+      box-shadow:
+        0 0 0px rgba(0, 0, 0, 0.2),
+        0 0 34px rgba(0, 229, 255, 0.12);
+    }
+    100% {
+      box-shadow:
+        0 0 0px rgba(0, 0, 0, 0.2),
+        0 0 22px rgba(0, 229, 255, 0.06);
+    }
   }
 
   .terminal::after {
@@ -83,15 +123,31 @@ __          __  _                            _                            _____ 
   }
 
   @keyframes crtFlicker {
-    0% { opacity: 0.06; filter: brightness(1) contrast(1); }
-    25% { opacity: 0.09; filter: brightness(1.03) contrast(1.01); }
-    50% { opacity: 0.07; filter: brightness(1.02) contrast(1.02); }
-    75% { opacity: 0.1; filter: brightness(1.04) contrast(1.03); }
-    100% { opacity: 0.06; filter: brightness(1) contrast(1); }
+    0% {
+      opacity: 0.06;
+      filter: brightness(1) contrast(1);
+    }
+    25% {
+      opacity: 0.09;
+      filter: brightness(1.03) contrast(1.01);
+    }
+    50% {
+      opacity: 0.07;
+      filter: brightness(1.02) contrast(1.02);
+    }
+    75% {
+      opacity: 0.1;
+      filter: brightness(1.04) contrast(1.03);
+    }
+    100% {
+      opacity: 0.06;
+      filter: brightness(1) contrast(1);
+    }
   }
 
   .ascii {
-    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+      "Liberation Mono", "Courier New", monospace;
     font-size: clamp(10px, 1.4vw, 16px);
     line-height: 1.05;
     color: var(--neon-cyan);
@@ -101,24 +157,68 @@ __          __  _                            _                            _____ 
     overflow: hidden;
   }
 
-  .console { font-family: inherit; }
-  .line { opacity: 0.95; }
-  .line .k { color: var(--neon-green); text-shadow: 0 0 6px rgba(57, 255, 20, 0.35); }
+  .console {
+    font-family: inherit;
+  }
+  .line {
+    opacity: 0.95;
+  }
+  .line .k {
+    color: var(--neon-green);
+    text-shadow: 0 0 6px rgba(57, 255, 20, 0.35);
+  }
 
   @media (prefers-reduced-motion: reduce) {
-    .terminal { animation: none !important; }
-    .terminal[data-flicker]::after { animation: none !important; opacity: 0 !important; }
+    .terminal {
+      animation: none !important;
+    }
+    .terminal[data-flicker]::after {
+      animation: none !important;
+      opacity: 0 !important;
+    }
+  }
+
+  .see-more {
+    position: absolute;
+    right: clamp(14px, 2vw, 20px);
+    bottom: clamp(12px, 2vw, 18px);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border-radius: 10px;
+    border: 1px solid rgba(0, 229, 255, 0.35);
+    background: rgba(0, 25, 32, 0.45);
+    color: #dff9ff;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 13px;
+    text-decoration: none;
+    box-shadow: 0 0 18px rgba(0, 255, 255, 0.1);
+    transition:
+      transform 0.15s ease,
+      box-shadow 0.15s ease,
+      border-color 0.15s ease;
+  }
+  .see-more:hover {
+    transform: translateY(-1px);
+    border-color: rgba(0, 229, 255, 0.55);
+    box-shadow: 0 0 22px rgba(0, 255, 255, 0.18);
+  }
+  .see-more:active {
+    transform: translateY(0);
   }
 </style>
 
 <script>
   (function () {
-    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const dots = document.getElementById('dots');
-    const ready = document.getElementById('ready-line');
-    const term = document.querySelector('.terminal');
+    const prefersReduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+    const dots = document.getElementById("dots");
+    const ready = document.getElementById("ready-line");
+    const term = document.querySelector(".terminal");
 
-    const beats = ['.', '..', '...'];
+    const beats = [".", "..", "..."];
     let i = 0;
     const step = () => {
       if (!dots) return;
@@ -127,8 +227,12 @@ __          __  _                            _                            _____ 
       if (i < beats.length) {
         setTimeout(step, 360);
       } else {
-        setTimeout(() => { if (ready) ready.hidden = false; }, 260);
-        setTimeout(() => { term?.removeAttribute('data-flicker'); }, 600);
+        setTimeout(() => {
+          if (ready) ready.hidden = false;
+        }, 260);
+        setTimeout(() => {
+          term?.removeAttribute("data-flicker");
+        }, 600);
       }
     };
     setTimeout(step, 240);

@@ -110,6 +110,7 @@ function CloudLabPanelInner({ apiUrl, baseUrl }: CloudLabPanelProps) {
       "Health: checks service health.",
       "Ping: quick reachability test.",
       "DB Check: verifies database connectivity.",
+      
     ],
     70,
     350

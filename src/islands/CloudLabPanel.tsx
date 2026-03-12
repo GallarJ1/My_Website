@@ -257,6 +257,7 @@ function CloudLabPanelInner({ apiUrl, baseUrl }: CloudLabPanelProps) {
       {/* Terminal output */}
       <div ref={termRef} className="terminal-screen" style={{ minHeight: 120 }}>
         <Line>$ connect {root}</Line>
+        <Line className="muted"># Live Azure API — first request may take a few seconds to wake</Line>
         {history.map((h, i) => <Block key={i} res={h} />)}
         {error && (
           <div className="err" style={{ marginTop: 8, display: "flex", gap: 10, alignItems: "center" }}>

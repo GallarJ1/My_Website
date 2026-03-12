@@ -20,42 +20,94 @@ const ARCH_IMG = "/images/Diagrams/Cloud Diagram.svg";
   </div>
 
   <div class="section">
-    <h4>Project Summary</h4>
+    <h4>Demo Interaction Flow</h4>
+    <p>
+      The interactive window above demonstrates how a frontend application can
+      communicate with a deployed backend service. When a command is triggered,
+      the Astro frontend sends a request to the backend API running on Azure App
+      Service.
+    </p>
+    <p>
+      Cross-Origin Resource Sharing (CORS) rules allow the portfolio site to
+      securely communicate with the API, while environment-based configuration
+      in Azure App Service provides the connection settings required for the
+      application to reach its supporting services.
+    </p>
+  </div>
+
+  <div class="section">
+    <h4>Project Overview</h4>
+    <p>
+      CloudLab is an Infrastructure as Code project built to demonstrate how a
+      complete Azure application environment can be provisioned and managed
+      through Terraform instead of being created manually in the Azure portal.
+    </p>
+    <p>
+      The project deploys the core cloud resources required to run a web
+      application, including resource groups, an App Service-hosted API,
+      database services, and the supporting configuration needed to connect them
+      together. This makes the environment reproducible, easier to maintain, and
+      suitable for real-world cloud deployment workflows.
+    </p>
+    <p>
+      During development the backend API was containerized with Docker to ensure
+      consistent behavior between local testing and cloud deployment. This
+      allows the application to be built, tested, and validated in a controlled
+      environment before being deployed to Azure infrastructure managed by
+      Terraform.
+    </p>
+  </div>
+
+  <div class="section">
+    <h4>How It Works</h4>
+    <p>
+      Terraform acts as the source for the infrastructure. When the
+      configuration is applied, Azure resources are created and wired together
+      automatically. The frontend communicates with the deployed API, and the
+      API uses environment-based configuration to connect securely to its
+      supporting services.
+    </p>
+  </div>
+
+  <div class="section">
+    <h4>Why It’s Impressive</h4>
     <ul class="bullets">
       <li>
-        <strong>Backend:</strong> Node.js <em>Express</em> API with routes for
-        <code>/api/health</code>, <code>/api/version</code>, and telemetry
-        endpoints for portfolio data.
+        Turns Azure infrastructure into version-controlled code instead of
+        manual portal configuration.
       </li>
       <li>
-        <strong>Hosting:</strong> Azure App Service (Windows) managed through an
-        App Service Plan. Environment variables define SQL connections and app secrets.
+        Demonstrates reproducible deployment practices using Terraform and the
+        AzureRM provider.
       </li>
       <li>
-        <strong>Security:</strong> CORS allowlist + API key header for sensitive
-        routes. App settings stored in Azure’s configuration, never in code.
+        Shows understanding of cloud hosting, application configuration,
+        databases, and service connectivity.
       </li>
       <li>
-        <strong>Infrastructure:</strong> Deployed via <em
-          >Terraform (AzureRM)</em
-        > — resource groups, plans, and apps are declared as code for full reproducibility.
-      </li>
-      <li>
-        <strong>Monitoring &amp; Maintenance:</strong> Azure Kudu for console access
-        and live log streaming with <code>az webapp log tail</code>.
+        Makes the environment easier to review, update, and redeploy as the
+        project grows.
       </li>
     </ul>
+  </div>
+
+  <div class="section">
+    <h4>Architecture Visualization</h4>
+    <p>
+      The diagram below represents the Azure environment provisioned by
+      Terraform and shows how the application, database, and supporting cloud
+      resources fit together.
+    </p>
   </div>
 
   <figure class="figure">
     <img
       src={ARCH_IMG}
-      alt="Azure App Service architecture for CloudLab API"
+      alt="Terraform-managed Azure application architecture for CloudLab"
       loading="lazy"
     />
     <figcaption class="muted">
-      Azure App Service hosting the Node.js Express API with Terraform-defined
-      infrastructure.
+      Terraform-defined Azure infrastructure for the CloudLab application stack.
     </figcaption>
   </figure>
 </section>

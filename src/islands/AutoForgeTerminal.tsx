@@ -91,6 +91,15 @@ export default function AutoForgeTerminal({ apiUrl }: Props) {
 
       <div ref={termRef} className="terminal-screen" style={{ minHeight: 180, maxHeight: 320 }}>
         <Line>$ connect {origin}</Line>
+        <Line className="muted">
+          # Requests flow Astro → AutoForge API (FastAPI) → Azure OpenAI
+        </Line>
+        <Line className="muted">
+          # Live API endpoint — first request may take a few seconds to wake
+        </Line>
+        <Line className="muted">
+          # Rate-limited to 3 requests per hour per IP
+        </Line>
         {messages.map((m, i) => (
           <Block key={i} role={m.role} text={m.content} />
         ))}

@@ -1,5 +1,6 @@
 ---
 import AutoForgeTerminal from "../../islands/AutoForgeTerminal";
+const ARCH_IMG = "/images/Diagrams/AutoForge_Diagram.svg";
 
 // ⬅️ Set this to your FastAPI chat endpoint
 const API_URL =
@@ -19,66 +20,105 @@ const API_URL =
     <h4 class="section-title">Interaction Window</h4>
   </div>
   <AutoForgeTerminal apiUrl={API_URL} client:visible />
-  <p class="hint muted">
-    Type a question and hit <b>Send</b>. Requests route Astro → AutoForge API
-    (FastAPI) → Azure OpenAI.
-    <br />For security and cost control, this demo is <strong
-      >rate-limited to 3 requests per hour per IP.
-      <br /> Token limit is set to 6000, use for Short Reasoning only!</strong
-    >
-  </p>
 
-  <!-- Curated, concise project summary -->
-  <div class="summary">
-    <ul>
+  <div class="section">
+    <h4>Demo Interaction Flow</h4>
+    <p>
+      When a user submits a prompt in the terminal above, the Astro frontend
+      sends a POST request to the AutoForge API endpoint (<code>/ai/chat</code
+      >). The FastAPI backend forwards the request to Azure OpenAI and returns
+      the generated response, which is then rendered in the terminal interface.
+    </p>
+    <p>
+      CORS rules allow the portfolio site to communicate securely with the
+      backend while API keys and deployment configuration are stored as
+      environment variables in Azure App Service.
+    </p>
+  </div>
+
+  <div class="section">
+    <h4>Project Overview</h4>
+    <p>
+      AutoForge AI is a cloud-deployed AI backend platform designed to
+      demonstrate how modern applications integrate AI services with automated
+      DevOps pipelines. The system exposes a FastAPI endpoint that forwards
+      prompts to Azure OpenAI, allowing the portfolio site to interact with a
+      live AI service.
+    </p>
+    <p>
+      The focus of this project is not just the AI integration but the
+      infrastructure and deployment workflow behind it. Every change pushed to
+      GitHub automatically builds, tests, and deploys the backend to Azure App
+      Service using a CI/CD pipeline.
+    </p>
+  </div>
+
+  <div class="section">
+    <h4>How It Works</h4>
+    <p>
+      AutoForge begins at the Astro frontend, where the user submits a prompt
+      through the terminal interface. That request is sent to a FastAPI backend
+      hosted on Azure App Service.
+    </p>
+    <p>
+      The backend validates the request, loads its configuration from Azure App
+      Service environment variables, and forwards the prompt to Azure OpenAI.
+      The generated response is then returned to the frontend and rendered back
+      into the terminal UI.
+    </p>
+    <p>
+      During development and CI, Docker is used to keep the application behavior
+      consistent across local testing, automated validation, and deployment
+      workflows.
+    </p>
+  </div>
+
+  <div class="section">
+    <h4>Why It’s Impressive</h4>
+    <ul class="bullets">
       <li>
-        <strong>Backend:</strong>
-        <em>FastAPI</em> exposes <code>/ai/chat</code> for GPT-style replies. Config
-        via env vars:
-        <code>AZURE_OPENAI_KEY</code>, <code>AZURE_OPENAI_ENDPOINT</code>, <code
-          >AZURE_OPENAI_DEPLOYMENT</code
-        >, <code>AZURE_OPENAI_API_VERSION</code>.
+        Combines AI integration, cloud hosting, and CI/CD automation into a
+        single working platform.
       </li>
-
       <li>
-        <strong>Hosting:</strong> Azure App Service (Linux, F1 Free). Oryx auto-builds
-        from <code>requirements.txt</code>; custom startup:
-        <code>python -m uvicorn app.main:app --host 0.0.0.0 --port $PORT</code>.
+        Uses GitHub Actions and Azure authentication through a Service Principal
+        instead of relying on older publish-profile deployment methods.
       </li>
-
       <li>
-        <strong>CI/CD:</strong> GitHub Actions using <em>Service Principal</em> (token-based)
-        via <code>azure/login</code> → <code>azure/webapps-deploy</code>,
-        replacing publish-profile auth. SP is scoped to the resource group.
+        Demonstrates containerized development and testing with Docker for more
+        consistent environments.
       </li>
-
       <li>
-        <strong>Local &amp; Cloud Testing with Docker:</strong> The app is containerized
-        for parity between dev and CI. The workflow (<code>ci.yml</code>) builds
-        the image on every push (via <code>docker/build-push-action@v6</code>),
-        runs tests in-container (pytest with a mocked AI client), and on <em
-          >main</em
-        > merges can push to GHCR. Reproduce locally:
-        <code>docker build -t autoforge-ai .</code> then <code
-          >docker run -p 8000:8000 autoforge-ai</code
-        > → open <code>http://localhost:8000</code>.
+        Shows secure configuration practices through CORS rules, Azure App
+        Settings, and GitHub Secrets.
       </li>
-
       <li>
-        <strong>Security:</strong> CORS allowlist (<code
-          >jeremygallardo.com</code
-        >, <code>localhost:4321</code>), secrets in Azure App Settings + GitHub
-        Secrets.
-      </li>
-
-      <li>
-        <strong>Astro Integration:</strong> The site sends a POST to <code
-          >/ai/chat</code
-        > with a messages array, and renders the JSON reply in a chat UI — the terminal
-        above uses the same flow.
+        Turns the portfolio itself into a live frontend client for a deployed AI
+        backend.
       </li>
     </ul>
   </div>
+
+  <div class="section">
+    <h4>Architecture Visualization</h4>
+    <p>
+      The sketch below shows how prompts move from the Astro frontend to the
+      FastAPI backend, through Azure OpenAI, and back to the user, while GitHub
+      Actions handles automated deployment to Azure App Service.
+    </p>
+  </div>
+
+  <figure class="figure">
+    <img
+      src={ARCH_IMG}
+      alt="AutoForge AI runtime and deployment architecture"
+      loading="lazy"
+    />
+    <figcaption class="muted">
+      Runtime request flow and CI/CD deployment pipeline for the AutoForge AI
+      backend.
+    </figcaption>
+  </figure>
 </section>
 
 <style>
@@ -98,47 +138,47 @@ const API_URL =
       0 0 35px rgba(0, 255, 255, 0.1),
       inset 0 0 1px rgba(255, 255, 255, 0.05);
   }
+
+  .section h4 {
+    font-family: Orbitron, system-ui, sans-serif;
+    color: #9bdcff;
+    text-shadow: 0 0 10px rgba(0, 200, 255, 0.25);
+    letter-spacing: 0.06em;
+    font-weight: 600;
+    margin: 8px 0 6px;
+  }
+
+  .section p,
+  .section li {
+    font-family: "JetBrains Mono", monospace;
+    color: rgba(210, 240, 250, 0.9);
+    font-size: 13px;
+    line-height: 1.6;
+  }
   .head {
     display: flex;
     align-items: baseline;
     gap: 10px;
   }
-  .title {
-    font-family: Orbitron, system-ui, sans-serif;
-    letter-spacing: 0.06em;
-    font-size: 1.05rem;
-    color: #9bdcff;
-    text-shadow: 0 0 10px rgba(0, 200, 255, 0.25);
+
+  .section {
+    display: grid;
+    gap: 8px;
+  }
+
+  .bullets {
     margin: 0;
+    padding-left: 18px;
   }
-  .section-head {
-    margin-top: 4px;
+  .figure img {
+    width: 100%;
+    max-width: 900px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
   }
-  .section-title {
-    font-family: Orbitron, system-ui, sans-serif;
-    color: #9bdcff;
-    letter-spacing: 0.06em;
-    font-size: 0.95rem;
-    margin: 0;
-    text-shadow: 0 0 10px rgba(0, 200, 255, 0.25);
-  }
-  .summary {
-    font-family:
-      JetBrains Mono,
-      ui-monospace;
-    font-size: 13px;
-    color: rgba(210, 240, 250, 0.9);
-    line-height: 1.55;
-  }
-  .summary ul {
-    list-style: none;
-    padding-left: 0;
-    margin: 4px 0 0;
-  }
-  .summary li {
-    margin: 8px 0;
-  }
-  .summary code {
+
+  code {
     background: rgba(0, 255, 255, 0.05);
     border: 1px solid rgba(0, 255, 255, 0.15);
     border-radius: 6px;
@@ -146,6 +186,7 @@ const API_URL =
     font-size: 12px;
     color: #b7ecff;
   }
+
   .hint {
     margin-top: -4px;
   }

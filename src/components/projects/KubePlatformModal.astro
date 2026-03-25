@@ -1,0 +1,327 @@
+---
+const DASHBOARD_URL = "https://agreeable-moss-0df902b0f.2.azurestaticapps.net/";
+const PREVIEW_IMG = "/images/Cover/KubePlatform.png";
+---
+
+<section class="kube-modal glass-surface">
+  <header class="head">
+    <h3 class="title">
+      Kubernetes DevOps Platform — Cloud-Native Monitoring Dashboard
+    </h3>
+    <span class="muted">
+      React (Vite) · FastAPI · Azure Static Web Apps · Container Apps · GitHub
+      Actions · Docker
+    </span>
+  </header>
+
+  <div class="section">
+    <h4>Project Overview</h4>
+    <p>
+      I built a full-stack DevOps monitoring platform designed to simulate and
+      visualize real-world infrastructure behavior, including service health,
+      traffic patterns, system metrics, and Kubernetes-style autoscaling.
+    </p>
+    <p>
+      The system uses a <strong>React (Vite) frontend</strong> and a
+      <strong>FastAPI backend</strong> deployed to Azure, with full
+      <strong>CI/CD pipelines through GitHub Actions</strong>.
+    </p>
+    <p>
+      It is designed to operate in two modes: a
+      <strong>cost-efficient Azure Container Apps deployment</strong> used now, and
+      a
+      <strong>future-ready AKS path</strong> for a true Kubernetes-native runtime
+      later.
+    </p>
+  </div>
+
+  <div class="section">
+    <h4>Live Dashboard Preview</h4>
+    <figure class="figure">
+      <img
+        src={PREVIEW_IMG}
+        alt="Preview of the Kubernetes DevOps Platform dashboard"
+        loading="lazy"
+      />
+    </figure>
+
+    <p class="hint muted">
+      The live dashboard is hosted in Azure and showcases service health,
+      deployment info, request testing, traffic simulation, live metrics,
+      charts, and a Kubernetes-style runtime layer.
+    </p>
+
+    <a class="live-link" href={DASHBOARD_URL} target="_blank" rel="noreferrer">
+      Open Live Dashboard
+    </a>
+  </div>
+
+  <div class="section">
+    <h4>Architecture</h4>
+    <div class="codebox">
+      <pre><code>React (Vite) Frontend
+        ↓
+Azure Static Web Apps (CI/CD)
+        ↓
+FastAPI Backend
+        ↓
+Azure Container Apps
+        ↓
+(Optional) Kubernetes / AKS</code></pre>
+    </div>
+  </div>
+
+  <div class="section">
+    <h4>Core Features</h4>
+    <ul class="bullets">
+      <li>
+        <strong>Service Health Monitoring:</strong> Checks API availability through
+        <code>/health</code> and displays uptime and service state.
+      </li>
+      <li>
+        <strong>Deployment Metadata:</strong> Shows runtime environment details such
+        as version, hostname, and uptime for debugging and verification.
+      </li>
+      <li>
+        <strong>Request Testing + Traffic Simulation:</strong> Sends real API requests
+        with configurable request counts and delay intervals, then tracks success,
+        failure, and latency.
+      </li>
+      <li>
+        <strong>Metrics Dashboard:</strong> Displays total requests, average latency,
+        and failure rate with real-time updates.
+      </li>
+      <li>
+        <strong>Live Charts:</strong> Visualizes request latency, CPU usage, and replica
+        trends.
+      </li>
+      <li>
+        <strong>Kubernetes Runtime Layer:</strong> Displays pod-style runtime data,
+        autoscaling behavior, and replica activity in a Kubernetes-inspired view.
+      </li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h4>Demo Mode</h4>
+    <p>
+      Because the current deployment runs on <strong
+        >Azure Container Apps</strong
+      > rather than a live <strong>AKS cluster</strong>, the Kubernetes runtime
+      layer operates in a fallback demo mode.
+    </p>
+    <ul class="bullets">
+      <li><code>cluster_connected = false</code></li>
+      <li>Runtime visuals fall back to simulated pod and autoscaling data</li>
+      <li>
+        The UI still demonstrates realistic CPU usage, replica behavior, and
+        HPA-style scaling
+      </li>
+    </ul>
+    <p>
+      This keeps the platform interactive and visually realistic while staying
+      low-cost and preserving an AKS-ready architecture.
+    </p>
+  </div>
+
+  <div class="section">
+    <h4>Cloud &amp; DevOps Implementation</h4>
+    <ul class="bullets">
+      <li>
+        <strong>Frontend Hosting:</strong> Deployed through
+        <strong>Azure Static Web Apps</strong> with automatic CI/CD on push.
+      </li>
+      <li>
+        <strong>Backend Hosting:</strong> Runs as a Dockerized
+        <strong>FastAPI</strong> service in <strong>Azure Container Apps</strong
+        >.
+      </li>
+      <li>
+        <strong>Container Registry:</strong> Images are stored in
+        <strong>Azure Container Registry (ACR)</strong>.
+      </li>
+      <li>
+        <strong>Frontend CI/CD:</strong>
+        <code>GitHub → Azure Static Web Apps → Build → Deploy</code>
+      </li>
+      <li>
+        <strong>Backend CI/CD:</strong>
+        <code>GitHub → Docker Build → ACR → Container Apps → Deploy</code>
+      </li>
+      <li>
+        <strong>Authentication &amp; Secrets:</strong> GitHub Actions uses an
+        <strong>Azure service principal</strong> and
+        <strong>GitHub Secrets</strong> for secure deployment.
+      </li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h4>Key Engineering Decisions</h4>
+    <ul class="bullets">
+      <li>
+        <strong>Cost Optimization:</strong> Used Azure Container Apps instead of AKS
+        to avoid full cluster overhead while still demonstrating cloud-native deployment
+        patterns.
+      </li>
+      <li>
+        <strong>Demo Mode Design:</strong> Built a simulated Kubernetes fallback layer
+        so the interface could still showcase advanced runtime concepts without requiring
+        a live cluster.
+      </li>
+      <li>
+        <strong>Environment Configuration:</strong> Used <code
+          >VITE_API_BASE_URL</code
+        > to manage frontend-to-backend communication and handled build-time versus
+        runtime environment differences.
+      </li>
+      <li>
+        <strong>Security Awareness:</strong> Kept secrets out of the frontend and
+        used GitHub Secrets plus Azure authentication for deployment automation.
+      </li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h4>Why This Project Matters</h4>
+    <p>
+      This project demonstrates my ability to design, build, and deploy a
+      full-stack cloud-native system using real DevOps practices, including
+      CI/CD, containerization, Azure deployment, observability, environment
+      management, and scalable architecture planning.
+    </p>
+  </div>
+</section>
+
+<style>
+  .kube-modal {
+    border-radius: 18px;
+    padding: 20px;
+    display: grid;
+    gap: 16px;
+    background: radial-gradient(
+      120% 120% at 0% 0%,
+      rgba(0, 40, 48, 0.35) 0%,
+      rgba(0, 14, 18, 0.55) 60%,
+      rgba(0, 10, 14, 0.7) 100%
+    );
+    border: 1px solid rgba(0, 255, 255, 0.18);
+    box-shadow:
+      0 0 35px rgba(0, 255, 255, 0.1),
+      inset 0 0 1px rgba(255, 255, 255, 0.05);
+  }
+
+  .head {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .title {
+    font-family: Orbitron, system-ui, sans-serif;
+    letter-spacing: 0.06em;
+    font-size: 1.05rem;
+    color: #9bdcff;
+    text-shadow: 0 0 10px rgba(0, 200, 255, 0.25);
+    margin: 0;
+  }
+
+  .section h4 {
+    font-family: Orbitron, system-ui, sans-serif;
+    color: #9bdcff;
+    text-shadow: 0 0 10px rgba(0, 200, 255, 0.25);
+    letter-spacing: 0.06em;
+    font-weight: 600;
+    margin: 8px 0 8px;
+  }
+
+  .section p,
+  .section li {
+    font-family: "JetBrains Mono", monospace;
+    color: rgba(210, 240, 250, 0.9);
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  .bullets {
+    margin: 0;
+    padding-left: 18px;
+  }
+
+  .muted {
+    color: rgba(200, 230, 240, 0.75);
+  }
+
+  .hint {
+    margin-top: -2px;
+  }
+
+  .figure img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    box-shadow: 0 0 24px rgba(0, 229, 255, 0.08);
+  }
+
+  .live-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-family: "JetBrains Mono", monospace;
+    color: #dffcff;
+    background: rgba(0, 255, 255, 0.08);
+    border: 1px solid rgba(0, 255, 255, 0.22);
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.08);
+    transition:
+      transform 0.18s ease,
+      box-shadow 0.18s ease,
+      border-color 0.18s ease;
+  }
+
+  .live-link:hover {
+    transform: translateY(-1px);
+    border-color: rgba(0, 255, 255, 0.38);
+    box-shadow: 0 0 28px rgba(0, 255, 255, 0.14);
+  }
+
+  .codebox {
+    background: #0a161a;
+    border: 1px solid rgba(0, 255, 255, 0.15);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 0 25px rgba(0, 255, 255, 0.08);
+  }
+
+  .codebox pre {
+    margin: 0;
+    padding: 14px 16px;
+    overflow-x: auto;
+  }
+
+  .codebox code,
+  code {
+    font-family: "JetBrains Mono", monospace;
+    background: rgba(0, 255, 255, 0.05);
+    border: 1px solid rgba(0, 255, 255, 0.15);
+    border-radius: 6px;
+    padding: 2px 6px;
+    font-size: 12px;
+    color: #b7ecff;
+  }
+
+  .codebox pre code {
+    background: transparent;
+    border: 0;
+    padding: 0;
+    display: block;
+    white-space: pre;
+    line-height: 1.7;
+  }
+</style>

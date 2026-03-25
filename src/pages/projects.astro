@@ -6,27 +6,32 @@ import ProjectCard from "../components/ProjectCard.astro";
 import ModalShell from "../components/ModalShell.astro";
 import BitlockerModal from "../components/projects/BitlockerModal.astro";
 import AutoForgeModal from "../components/projects/AutoForgeModal.astro";
+import KubePlatformModal from "../components/projects/KubePlatformModal.astro";
 
 const projects = [
   {
     id: "cloudlab",
     title: "Terraform CloudLab",
     thumb: "/images/Cover/CloudLab.png",
+    category: "developer",
   },
   {
     id: "autoforge",
     title: "CI/CD AutoForge AI",
     thumb: "/images/Cover/Autoforge.png",
+    category: "developer",
   },
   {
     id: "bitlocker",
     title: "BitLocker Enforcement",
     thumb: "/images/Cover/Bitlocker.png",
+    category: "developer",
   },
   {
     id: "kubernetes",
     title: "Kubernetes DevOps Platform",
-    thumb: "/images/projects/kubernetes-thumb.webp",
+    thumb: "/images/Cover/Kubernetes.png",
+    category: "developer",
   },
 ];
 ---
@@ -34,10 +39,25 @@ const projects = [
 <BaseLayout title="Projects">
   <TerminalIntro title="Welcome to my Projects" />
 
+  <div class="project-mode-switch" aria-label="Project category toggle">
+    <button class="mode-btn active" type="button" data-mode="developer">
+      Developer
+    </button>
+    <button class="mode-btn" type="button" data-mode="administrator">
+      Administrator
+    </button>
+  </div>
+
   <section id="projects" class="projects-grid" aria-label="Projects">
     {
       projects.map((p) => (
-        <ProjectCard id={p.id} title={p.title} thumb={p.thumb} />
+        <div
+          class="project-slot"
+          data-category={p.category}
+          data-project-id={p.id}
+        >
+          <ProjectCard id={p.id} title={p.title} thumb={p.thumb} />
+        </div>
       ))
     }
   </section>
@@ -53,7 +73,17 @@ const projects = [
       </ModalShell>
     </div>
 
-    <!-- AutoForge (placeholder for now) -->
+    <!-- Kubernetes DevOps Platform -->
+    <div class="modal-wrap" data-modal="kubernetes" hidden>
+      <ModalShell
+        title="Kubernetes DevOps Platform"
+        tagline="Cloud-native monitoring dashboard with Azure Container Apps, CI/CD, and Kubernetes runtime simulation"
+      >
+        <KubePlatformModal />
+      </ModalShell>
+    </div>
+
+    <!-- AutoForge -->
     <div class="modal-wrap" data-modal="autoforge" hidden>
       <ModalShell
         title="CI/CD AutoForge AI"
@@ -63,7 +93,7 @@ const projects = [
       </ModalShell>
     </div>
 
-    <!-- BitLocker (placeholder) -->
+    <!-- BitLocker -->
     <div class="modal-wrap" data-modal="bitlocker" hidden>
       <ModalShell
         title="BitLocker Enforcement"
@@ -73,7 +103,7 @@ const projects = [
       </ModalShell>
     </div>
 
-    <!-- ChatOps (placeholder) -->
+    <!-- ChatOps -->
     <div class="modal-wrap" data-modal="chatops" hidden>
       <ModalShell
         title="ChatOps Agent"
@@ -89,15 +119,29 @@ const projects = [
     const grid = document.querySelector(".projects-grid");
     const root = document.getElementById("modal-root");
 
+    const modeButtons = document.querySelectorAll(".mode-btn");
+    const projectSlots = document.querySelectorAll(".project-slot");
+
+    function setProjectMode(mode) {
+      modeButtons.forEach((btn) => {
+        btn.classList.toggle("active", btn.dataset.mode === mode);
+      });
+
+      projectSlots.forEach((slot) => {
+        const matches = slot.dataset.category === mode;
+        slot.style.display = matches ? "" : "none";
+      });
+    }
+
     function showModal(id) {
       if (!root) return;
       root.hidden = false;
       document.body.style.overflow = "hidden";
-      // hide all
+
       root.querySelectorAll(".modal-wrap").forEach((el) => {
         el.hidden = true;
       });
-      // show selected
+
       const target = root.querySelector(`.modal-wrap[data-modal="${id}"]`);
       if (target) target.hidden = false;
     }
@@ -106,10 +150,17 @@ const projects = [
       if (!root) return;
       root.hidden = true;
       document.body.style.overflow = "";
+
       root.querySelectorAll(".modal-wrap").forEach((el) => {
         el.hidden = true;
       });
     }
+
+    modeButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        setProjectMode(btn.dataset.mode);
+      });
+    });
 
     grid?.addEventListener("click", (ev) => {
       const t = ev.target;
@@ -122,15 +173,67 @@ const projects = [
     document
       .querySelectorAll("[data-close]")
       .forEach((btn) => btn.addEventListener("click", closeAll));
+
     window.addEventListener("keydown", (e) => {
       if (e.key === "Escape" && root && !root.hidden) closeAll();
     });
+
     document
       .querySelectorAll(".overlay")
       .forEach((el) => el.addEventListener("click", closeAll));
+
+    setProjectMode("developer");
   </script>
 
   <style>
+    .project-mode-switch {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      margin: 22px auto 30px;
+      flex-wrap: wrap;
+    }
+
+    .mode-btn {
+      appearance: none;
+      border: 1px solid rgba(0, 255, 255, 0.22);
+      background: rgba(0, 255, 255, 0.05);
+      color: #cfefff;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.95rem;
+      letter-spacing: 0.04em;
+      padding: 12px 22px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition:
+        transform 0.18s ease,
+        border-color 0.18s ease,
+        box-shadow 0.18s ease,
+        background 0.18s ease,
+        color 0.18s ease;
+      box-shadow: 0 0 18px rgba(0, 255, 255, 0.06);
+    }
+
+    .mode-btn:hover {
+      transform: translateY(-1px);
+      border-color: rgba(0, 255, 255, 0.38);
+      box-shadow: 0 0 22px rgba(0, 255, 255, 0.14);
+    }
+
+    .mode-btn.active {
+      color: #081318;
+      background: linear-gradient(
+        90deg,
+        rgba(0, 255, 200, 0.95),
+        rgba(120, 255, 220, 0.92)
+      );
+      border-color: rgba(140, 255, 225, 0.95);
+      box-shadow:
+        0 0 12px rgba(0, 255, 200, 0.35),
+        0 0 28px rgba(0, 255, 200, 0.18);
+    }
+
     .projects-grid {
       max-width: 1200px;
       margin: 24px auto 64px;
@@ -139,6 +242,10 @@ const projects = [
       grid-template-columns: repeat(2, minmax(260px, 1fr));
       gap: clamp(16px, 2.8vw, 28px);
       justify-items: stretch;
+    }
+
+    .project-slot {
+      display: block;
     }
 
     @media (max-width: 860px) {

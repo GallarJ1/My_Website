@@ -1,32 +1,132 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-//import Nav from "../components/Nav.astro";
 import RotatingTypewriter from "../components/RotatingTypewriter.astro";
+
+// ✅ Sections
+import SkillSection from "../components/sections/SkillSection.astro";
+import AboutSection from "../components/sections/AboutSection.astro";
+import ProjectsSection from "../components/sections/ProjectSection.astro";
+import CertificationsSection from "../components/sections/CertificationSection.astro";
+import ContactSection from "../components/sections/ContactSection.astro";
 
 const roles = ["Systems & Cloud Engineer", "DevOps & Automation Specialist"];
 ---
 
-<BaseLayout title="Jeremy — Home">
-  <main class="container hero">
-    <div class="kicker">WELCOME</div>
-    <h1 class="hi">Hi, I'm Jeremy,</h1>
+<BaseLayout title="Jeremy — Portfolio">
+  <main class="onepage-shell">
+    <!-- HERO -->
+    <section id="home" class="page-section hero">
+      <div class="container">
+        <div class="kicker">WELCOME</div>
 
-    <h2 class="roles">
-      <RotatingTypewriter roles={roles} />
-    </h2>
+        <h1 class="hi">Hi, I'm Jeremy,</h1>
 
-    <p class="sub">
-      I transform complex infrastructure into secure, scalable solutions -
-      streamlining systems, automating workflows, and blending system
-      administration, DevOps, and cloud engineering to power the next generation
-      of business innovation.
-    </p>
+        <h2 class="roles">
+          <RotatingTypewriter roles={roles} />
+        </h2>
 
-    <a
-      class="cta"
-      href="https://github.com/GallarJ1/My_Website"
-      target="_blank"
-      rel="noopener noreferrer">SEE MY WEBSITES SOURCE CODE</a
-    >
+        <p
+          class="sub scramble-text"
+          data-text="I transform complex infrastructure into secure, scalable solutions - streamlining systems, automating workflows, and blending system administration, DevOps, and cloud engineering to power the next generation of business innovation."
+        >
+          I transform complex infrastructure into secure, scalable solutions -
+          streamlining systems, automating workflows, and blending system
+          administration, DevOps, and cloud engineering to power the next
+          generation of business innovation.
+        </p>
+
+        <div class="cta-group">
+          <a class="cta" href="#contact"> CONTACT ME </a>
+
+          <a
+            class="cta"
+            href="https://github.com/GallarJ1/My_Website"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            SOURCE
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about" class="page-section allow-native-scroll">
+      <AboutSection />
+    </section>
+
+    <!-- SKILLS -->
+    <section id="skills" class="page-section">
+      <SkillSection />
+    </section>
+
+    <!-- PROJECTS -->
+    <section id="projects" class="page-section">
+      <ProjectsSection />
+    </section>
+
+    <!-- CERTIFICATIONS -->
+    <section id="certifications" class="page-section allow-native-scroll">
+      <CertificationsSection />
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="page-section">
+      <ContactSection />
+    </section>
   </main>
 </BaseLayout>
+
+<script is:inline>
+  document.addEventListener("DOMContentLoaded", () => {
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789<>/$#{}[]";
+    const items = document.querySelectorAll(".scramble-text");
+
+    items.forEach((item) => {
+      const original = item.dataset.text || item.textContent || "";
+      let interval = null;
+
+      const scramble = () => {
+        item.textContent = original
+          .split("")
+          .map((char) => {
+            if (char === " ") return " ";
+            return chars[Math.floor(Math.random() * chars.length)];
+          })
+          .join("");
+      };
+
+      const startScramble = () => {
+        if (interval) return;
+        scramble();
+        interval = window.setInterval(scramble, 90);
+      };
+
+      const stopScramble = () => {
+        if (interval) {
+          clearInterval(interval);
+          interval = null;
+        }
+        item.textContent = original;
+      };
+
+      item.addEventListener("mouseenter", startScramble);
+      item.addEventListener("mousemove", startScramble);
+      item.addEventListener("mouseleave", stopScramble);
+      item.addEventListener("focus", startScramble);
+      item.addEventListener("blur", stopScramble);
+    });
+  });
+</script>
+
+<style>
+  /* HERO specific */
+  .hero {
+    text-align: center;
+  }
+
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+</style>

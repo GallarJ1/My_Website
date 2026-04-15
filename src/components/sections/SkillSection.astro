@@ -1,0 +1,455 @@
+---
+const skills = [
+  { name: "Kubernetes", logo: "/logos/Kubernetes.svg" },
+  { name: "Azure", logo: "/logos/Azure.svg" },
+  { name: "Amazon Web Services", logo: "/logos/AWS.svg" },
+  { name: "Google Workspace", logo: "/logos/Google.svg" },
+  { name: "Java", logo: "/logos/Java.svg" },
+  { name: "Python", logo: "/logos/Python.svg" },
+  { name: "Linux", logo: "/logos/Linux.svg" },
+  { name: "JavaScript", logo: "/logos/JavaScript.svg" },
+  { name: "TypeScript", logo: "/logos/TypeScript.svg" },
+  { name: "Shell", logo: "/logos/Powershell.svg" },
+  { name: "Bash", logo: "/logos/Bash.svg" },
+  { name: "Docker", logo: "/logos/Docker.svg" },
+  { name: "Google Cloud Platform", logo: "/logos/Google-Cloud.svg" },
+  { name: "Microsoft 365", logo: "/logos/365.svg" },
+  { name: "Terraform", logo: "/logos/HashiCorp-Terraform.svg" },
+];
+---
+
+<section class="skills-wrap js-skills-wrap">
+  <div class="skills-bg-glow" aria-hidden="true"></div>
+
+  <div class="skills-shell">
+    <header class="skills-header">
+      <p class="skills-kicker">CORE STACK</p>
+      <h2 class="skills-title">Skills & Technologies</h2>
+      <p class="skills-sub">
+        Platforms, tools, and languages I use across infrastructure, cloud,
+        automation, and development workflows.
+      </p>
+    </header>
+
+    <div class="skills-grid-wrap">
+      <span class="skills-divider skills-divider-1" aria-hidden="true"></span>
+      <span class="skills-divider skills-divider-2" aria-hidden="true"></span>
+
+      <div class="skills-grid">
+        {
+          skills.map((skill, index) => (
+            <article class="skill-row" style={`--i:${index};`}>
+              <img
+                class="skill-logo"
+                src={skill.logo}
+                alt={`${skill.name} logo`}
+                loading="lazy"
+                decoding="async"
+              />
+
+              <span class="skill-label">{skill.name}</span>
+              <span class="skill-line" aria-hidden="true" />
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const initSkillsSection = () => {
+    const section = document.querySelector(".js-skills-wrap");
+    if (!section) return;
+
+    let active = false;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        if (!entry) return;
+
+        if (entry.isIntersecting && entry.intersectionRatio > 0.25) {
+          if (!active) {
+            active = true;
+            section.classList.add("is-active");
+          }
+        } else {
+          active = false;
+          section.classList.remove("is-active");
+        }
+      },
+      { threshold: [0, 0.25, 0.5] },
+    );
+
+    observer.observe(section);
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initSkillsSection, {
+      once: true,
+    });
+  } else {
+    initSkillsSection();
+  }
+</script>
+
+<style>
+  .skills-wrap {
+    width: min(1180px, 100%);
+    height: calc(100svh - 88px);
+    margin: 0 auto;
+    display: grid;
+    place-items: center;
+    position: relative;
+    isolation: isolate;
+  }
+
+  .skills-bg-glow {
+    position: absolute;
+    inset: 18% 24%;
+    border-radius: 999px;
+    background: radial-gradient(
+      circle,
+      rgba(204, 255, 0, 0.08),
+      transparent 72%
+    );
+    filter: blur(60px);
+    pointer-events: none;
+    opacity: 0.7;
+  }
+
+  .skills-shell {
+    width: min(960px, 100%);
+    border-radius: 28px;
+    padding: 26px 28px 24px;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.035),
+      rgba(255, 255, 255, 0.015)
+    );
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.04),
+      0 0 34px rgba(204, 255, 0, 0.03);
+    transform: translateY(-22px);
+  }
+
+  .skills-header {
+    text-align: center;
+    max-width: 720px;
+    margin: 0 auto 22px;
+    position: relative;
+    opacity: 0;
+    transform: translateY(16px);
+    transition:
+      opacity 0.65s ease,
+      transform 0.65s ease;
+  }
+
+  .skills-wrap.is-active .skills-header {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .skills-kicker {
+    margin: 0 0 10px;
+    font-size: 0.76rem;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: #ccff00;
+    text-shadow:
+      0 0 10px rgba(204, 255, 0, 0.25),
+      0 0 20px rgba(204, 255, 0, 0.1);
+  }
+
+  .skills-title {
+    margin: 0;
+    font-family: "Orbitron", sans-serif;
+    font-size: clamp(1.9rem, 4vw, 2.75rem);
+    line-height: 1.05;
+    letter-spacing: 0.03em;
+    color: #f4f7fb;
+  }
+
+  .skills-title-sweep {
+    position: absolute;
+    left: 50%;
+    top: 34px;
+    width: 220px;
+    height: 10px;
+    transform: translateX(-50%);
+    opacity: 0;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.95),
+      rgba(204, 255, 0, 0.9),
+      rgba(255, 255, 255, 0.95),
+      transparent
+    );
+    filter: blur(10px);
+    pointer-events: none;
+  }
+
+  .skills-wrap.is-active .skills-title-sweep {
+    animation: titleSweep 1.2s ease forwards;
+    animation-delay: 0.2s;
+  }
+
+  .skills-sub {
+    margin: 12px auto 0;
+    max-width: 700px;
+    color: #98a1ab;
+    font-size: 0.96rem;
+    line-height: 1.65;
+  }
+
+  .skills-grid-wrap {
+    position: relative;
+  }
+
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: 32px;
+    row-gap: 10px;
+    align-items: start;
+  }
+
+  .skills-divider {
+    position: absolute;
+    top: 4px;
+    bottom: 4px;
+    width: 1px;
+    pointer-events: none;
+    opacity: 0.28;
+    background: linear-gradient(
+      180deg,
+      transparent,
+      rgba(255, 255, 255, 0.06),
+      rgba(204, 255, 0, 0.2),
+      rgba(255, 255, 255, 0.06),
+      transparent
+    );
+  }
+
+  .skills-divider::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: -18%;
+    width: 10px;
+    height: 140px;
+    transform: translateX(-50%);
+    border-radius: 999px;
+    opacity: 0;
+    background: linear-gradient(
+      180deg,
+      transparent,
+      rgba(204, 255, 0, 1),
+      rgba(255, 255, 255, 1),
+      rgba(204, 255, 0, 1),
+      transparent
+    );
+    filter: blur(10px);
+  }
+
+  .skills-divider-1 {
+    left: calc(33.333% - 16px);
+  }
+
+  .skills-divider-2 {
+    left: calc(66.666% - 8px);
+  }
+
+  .skills-wrap.is-active .skills-divider::after {
+    animation: dividerPulse 1.7s ease forwards;
+  }
+
+  .skills-wrap.is-active .skills-divider-2::after {
+    animation-delay: 0.22s;
+  }
+
+  .skill-row {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 42px;
+    padding: 8px 4px 10px;
+    opacity: 0;
+    transform: translateY(14px);
+    transition:
+      opacity 0.5s ease,
+      transform 0.5s ease,
+      filter 0.2s ease;
+  }
+
+  .skills-wrap.is-active .skill-row {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: calc(var(--i) * 0.04s);
+  }
+
+  .skill-logo {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+    flex: 0 0 28px;
+    transition:
+      transform 0.18s ease,
+      filter 0.18s ease;
+  }
+
+  .skill-label {
+    position: relative;
+    z-index: 2;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #eef2f7;
+    letter-spacing: 0.01em;
+    transition:
+      transform 0.18s ease,
+      color 0.18s ease,
+      text-shadow 0.18s ease;
+  }
+
+  .skill-line {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.08),
+      rgba(204, 255, 0, 0.16),
+      rgba(255, 255, 255, 0.08),
+      transparent
+    );
+    opacity: 0.6;
+    transition:
+      opacity 0.18s ease,
+      background 0.18s ease,
+      transform 0.18s ease;
+    transform-origin: left center;
+  }
+
+  .skill-row:hover .skill-logo {
+    transform: scale(1.18);
+    filter: drop-shadow(0 0 10px rgba(204, 255, 0, 0.2))
+      drop-shadow(0 0 22px rgba(204, 255, 0, 0.1));
+  }
+
+  .skill-row:hover .skill-label {
+    transform: translateX(6px);
+    color: #ffffff;
+    text-shadow:
+      0 0 16px rgba(255, 255, 255, 0.18),
+      0 0 28px rgba(204, 255, 0, 0.08);
+  }
+
+  .skill-row:hover .skill-line {
+    opacity: 1;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(204, 255, 0, 0.18),
+      rgba(204, 255, 0, 0.9),
+      rgba(204, 255, 0, 0.18),
+      transparent
+    );
+    transform: scaleX(1.04);
+  }
+
+  @keyframes dividerPulse {
+    0% {
+      opacity: 0;
+      top: -18%;
+    }
+    15% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+      top: 105%;
+    }
+  }
+
+  @keyframes titleSweep {
+    0% {
+      opacity: 0;
+      transform: translateX(-50%) scaleX(0.35);
+    }
+    35% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+      transform: translateX(-50%) scaleX(1.35);
+    }
+  }
+
+  @media (max-width: 900px) {
+    .skills-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      column-gap: 24px;
+    }
+
+    .skills-divider {
+      display: none;
+    }
+  }
+
+  @media (max-width: 620px) {
+    .skills-shell {
+      border-radius: 22px;
+      padding: 22px 16px;
+      transform: translateY(0);
+    }
+
+    .skills-grid {
+      grid-template-columns: 1fr;
+      column-gap: 0;
+      row-gap: 8px;
+    }
+
+    .skill-row {
+      min-height: 40px;
+      padding: 7px 2px 9px;
+    }
+
+    .skill-logo {
+      width: 26px;
+      height: 26px;
+      flex-basis: 26px;
+    }
+
+    .skill-label {
+      font-size: 0.95rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .skills-header,
+    .skill-row,
+    .skills-divider::after,
+    .skills-title-sweep,
+    .skill-logo,
+    .skill-label,
+    .skill-line {
+      transition: none !important;
+      animation: none !important;
+    }
+
+    .skills-header,
+    .skill-row {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  }
+</style>

@@ -71,7 +71,7 @@ __          __  _                            _                            _____ 
     width: 100%;
     display: grid;
     place-items: center;
-    padding: clamp(24px, 4vw, 48px) 16px;
+    padding: 0 16px 20px;
   }
   .terminal {
     width: min(1200px, 95vw);
@@ -146,8 +146,9 @@ __          __  _                            _                            _____ 
   }
 
   .ascii {
-    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
-      "Liberation Mono", "Courier New", monospace;
+    font-family:
+      ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+      "Courier New", monospace;
     font-size: clamp(10px, 1.4vw, 16px);
     line-height: 1.05;
     color: var(--neon-cyan);
@@ -210,31 +211,84 @@ __          __  _                            _                            _____ 
 </style>
 
 <script>
-  (function () {
-    const prefersReduced = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
-    const dots = document.getElementById("dots");
-    const ready = document.getElementById("ready-line");
-    const term = document.querySelector(".terminal");
+  (() => {
+    const section = document.querySelector(".terminal-hero");
+    if (!section) return;
 
-    const beats = [".", "..", "..."];
-    let i = 0;
-    const step = () => {
-      if (!dots) return;
-      dots.textContent = beats[i];
-      i++;
-      if (i < beats.length) {
-        setTimeout(step, 360);
-      } else {
-        setTimeout(() => {
-          if (ready) ready.hidden = false;
-        }, 260);
-        setTimeout(() => {
-          term?.removeAttribute("data-flicker");
-        }, 600);
-      }
-    };
-    setTimeout(step, 240);
+    const dots = section.querySelector("#dots") as HTMLElement | null;
+    const ready = section.querySelector("#ready-line") as HTMLElement | null;
+    const term = section.querySelector(".terminal") as HTMLElement | null;
+
+    let observer;
+    let runToken = 0;
+    let hasPlayedInView = false;
+
+    function resetAnimation() {
+      runToken++;
+      hasPlayedInView = false;
+
+      if (dots) dots.textContent = "";
+      if (ready) ready.hidden = true;
+      term?.setAttribute("data-flicker", "");
+    }
+
+    function playAnimation() {
+      if (hasPlayedInView) return;
+      hasPlayedInView = true;
+
+      const currentToken = ++runToken;
+      const beats = [".", "..", "..."];
+      let i = 0;
+
+      if (dots) dots.textContent = "";
+      if (ready) ready.hidden = true;
+      term?.setAttribute("data-flicker", "");
+
+      const step = () => {
+        if (currentToken !== runToken) return;
+        if (!dots) return;
+
+        dots.textContent = beats[i];
+        i++;
+
+        if (i < beats.length) {
+          setTimeout(step, 360);
+        } else {
+          setTimeout(() => {
+            if (currentToken !== runToken) return;
+            if (ready) ready.hidden = false;
+          }, 260);
+
+          setTimeout(() => {
+            if (currentToken !== runToken) return;
+            term?.removeAttribute("data-flicker");
+          }, 600);
+        }
+      };
+
+      setTimeout(() => {
+        if (currentToken !== runToken) return;
+        step();
+      }, 240);
+    }
+
+    resetAnimation();
+
+    observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && entry.intersectionRatio >= 0.45) {
+            playAnimation();
+          } else if (entry.intersectionRatio < 0.2) {
+            resetAnimation();
+          }
+        });
+      },
+      {
+        threshold: [0, 0.2, 0.45, 0.7],
+      },
+    );
+
+    observer.observe(section);
   })();
 </script>

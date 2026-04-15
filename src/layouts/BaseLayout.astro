@@ -1,12 +1,381 @@
 ---
 import Nav from "../components/Nav.astro";
-import "../styles/global.css";   // <<— this pulls in your global CSS
+import CyberAmbientBackground from "../components/CyberAmbientBackground.astro";
+import "../styles/global.css";
 
-const {
-  title = "Jeremy — Portfolio",
-  description = "Personal site"
-} = Astro.props;
+const { title = "Jeremy — Portfolio", description = "Personal site" } =
+  Astro.props;
 ---
+
+<script is:inline>
+  document.addEventListener("DOMContentLoaded", () => {
+    const sections = [...document.querySelectorAll(".page-section")];
+    const dots = [...document.querySelectorAll(".section-dot")];
+    const navLinks = [
+      ...document.querySelectorAll(
+        '.nav-link[href^="#"], .contact-chip[href^="#"]',
+      ),
+    ];
+
+    if (sections.length) {
+      let currentIndex = 0;
+      let isAnimating = false;
+      let wheelLock = false;
+      let touchStartY = 0;
+      let touchLocked = false;
+
+      const SCROLL_LOCK_MS = 850;
+      const TOUCH_THRESHOLD = 50;
+
+      const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
+
+      const getClosestSectionIndex = () => {
+        const viewportCenter = window.innerHeight / 2;
+        let closestIndex = 0;
+        let closestDistance = Infinity;
+
+        sections.forEach((section, index) => {
+          const rect = section.getBoundingClientRect();
+          const sectionCenter = rect.top + rect.height / 2;
+          const distance = Math.abs(viewportCenter - sectionCenter);
+
+          if (distance < closestDistance) {
+            closestDistance = distance;
+            closestIndex = index;
+          }
+        });
+
+        return closestIndex;
+      };
+
+      const setActiveDot = () => {
+        currentIndex = getClosestSectionIndex();
+        const activeId = sections[currentIndex]?.id;
+
+        dots.forEach((dot) => {
+          const isActive = dot.getAttribute("href") === `#${activeId}`;
+          dot.classList.toggle("active", isActive);
+        });
+
+        navLinks.forEach((link) => {
+          const href = link.getAttribute("href");
+          const isActive = href === `#${activeId}`;
+          link.classList.toggle("active", isActive);
+        });
+      };
+
+      const goToSection = (index) => {
+        const targetIndex = clamp(index, 0, sections.length - 1);
+        const target = sections[targetIndex];
+        if (!target) return;
+
+        isAnimating = true;
+        wheelLock = true;
+        currentIndex = targetIndex;
+
+        target.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+
+        setActiveDot();
+
+        window.setTimeout(() => {
+          wheelLock = false;
+          isAnimating = false;
+          setActiveDot();
+        }, SCROLL_LOCK_MS);
+      };
+
+      const goToNextSection = () => {
+        const baseIndex = getClosestSectionIndex();
+        goToSection(baseIndex + 1);
+      };
+
+      const goToPrevSection = () => {
+        const baseIndex = getClosestSectionIndex();
+        goToSection(baseIndex - 1);
+      };
+
+      let ticking = false;
+
+      const onScroll = () => {
+        if (!ticking) {
+          requestAnimationFrame(() => {
+            setActiveDot();
+            ticking = false;
+          });
+          ticking = true;
+        }
+      };
+
+      dots.forEach((dot) => {
+        dot.addEventListener("click", (e) => {
+          e.preventDefault();
+          const targetId = dot.getAttribute("href");
+          const index = sections.findIndex(
+            (section) => `#${section.id}` === targetId,
+          );
+          if (index !== -1) goToSection(index);
+        });
+      });
+
+      navLinks.forEach((link) => {
+        link.addEventListener("click", (e) => {
+          const href = link.getAttribute("href");
+          if (!href || !href.startsWith("#")) return;
+
+          const index = sections.findIndex(
+            (section) => `#${section.id}` === href,
+          );
+          if (index === -1) return;
+
+          e.preventDefault();
+          goToSection(index);
+        });
+      });
+
+      const getScrollableParent = (target) => {
+        if (!(target instanceof Element)) return null;
+
+        return target.closest(
+          "[data-allow-scroll], .allow-native-scroll, .projects-grid, .modal-body",
+        );
+      };
+
+      const canScrollInDirection = (element, direction) => {
+        if (!(element instanceof HTMLElement)) return false;
+
+        const { scrollTop, scrollHeight, clientHeight } = element;
+        const maxScrollTop = scrollHeight - clientHeight;
+
+        if (maxScrollTop <= 0) return false;
+
+        if (direction > 0) {
+          return scrollTop < maxScrollTop - 1;
+        }
+
+        return scrollTop > 1;
+      };
+
+      window.addEventListener(
+        "wheel",
+        (e) => {
+          const delta = e.deltaY;
+          if (Math.abs(delta) < 18) return;
+
+          const direction = delta > 0 ? 1 : -1;
+          const scrollableParent = getScrollableParent(e.target);
+
+          if (
+            scrollableParent &&
+            canScrollInDirection(scrollableParent, direction)
+          ) {
+            return;
+          }
+
+          if (wheelLock || isAnimating) {
+            e.preventDefault();
+            return;
+          }
+
+          e.preventDefault();
+
+          if (direction > 0) {
+            goToNextSection();
+          } else {
+            goToPrevSection();
+          }
+        },
+        { passive: false },
+      );
+
+      window.addEventListener(
+        "touchstart",
+        (e) => {
+          if (!e.touches?.length) return;
+          touchStartY = e.touches[0].clientY;
+        },
+        { passive: true },
+      );
+
+      window.addEventListener(
+        "touchmove",
+        (e) => {
+          if (wheelLock || isAnimating || touchLocked) return;
+          if (!e.touches?.length) return;
+
+          const currentY = e.touches[0].clientY;
+          const delta = touchStartY - currentY;
+
+          if (Math.abs(delta) < TOUCH_THRESHOLD) return;
+
+          touchLocked = true;
+
+          if (delta > 0) {
+            goToNextSection();
+          } else {
+            goToPrevSection();
+          }
+
+          window.setTimeout(() => {
+            touchLocked = false;
+          }, SCROLL_LOCK_MS);
+        },
+        { passive: true },
+      );
+
+      window.addEventListener("scroll", onScroll, { passive: true });
+      window.addEventListener("resize", setActiveDot);
+
+      setActiveDot();
+    }
+
+    const canvas = document.getElementById("drag-trail-canvas");
+    if (!(canvas instanceof HTMLCanvasElement)) return;
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    let width = 0;
+    let height = 0;
+    let dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+    let isPointerDown = false;
+    let lastX = 0;
+    let lastY = 0;
+
+    const particles = [];
+
+    function resizeCanvas() {
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      width = window.innerWidth;
+      height = window.innerHeight;
+
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
+      canvas.style.width = width + "px";
+      canvas.style.height = height + "px";
+
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+
+    function spawnBurst(x, y, dx, dy) {
+      const speed = Math.hypot(dx, dy);
+      const count = Math.min(12, Math.max(4, Math.floor(speed * 0.22)));
+
+      for (let i = 0; i < count; i++) {
+        const spreadX = (Math.random() - 0.5) * 1.4;
+        const spreadY = (Math.random() - 0.5) * 1.4;
+
+        particles.push({
+          x,
+          y,
+          vx: dx * (0.06 + Math.random() * 0.06) + spreadX,
+          vy: dy * (0.06 + Math.random() * 0.06) + spreadY,
+          size: 1.2 + Math.random() * 2.4,
+          life: 0,
+          maxLife: 14 + Math.random() * 14,
+          alpha: 0.95,
+          glow: 5 + Math.random() * 8,
+          spin: (Math.random() - 0.5) * 0.2,
+          angle: Math.random() * Math.PI * 2,
+        });
+      }
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, width, height);
+
+      for (let i = particles.length - 1; i >= 0; i--) {
+        const p = particles[i];
+        p.life += 1;
+
+        if (p.life >= p.maxLife) {
+          particles.splice(i, 1);
+          continue;
+        }
+
+        const progress = p.life / p.maxLife;
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vx *= 0.97;
+        p.vy *= 0.97;
+        p.angle += p.spin;
+        p.alpha = 1 - progress;
+
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.angle);
+
+        ctx.globalAlpha = p.alpha * 0.9;
+        ctx.fillStyle = "#d9ff66";
+        ctx.shadowColor = "#ccff00";
+        ctx.shadowBlur = p.glow;
+
+        ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 2.6);
+        ctx.restore();
+      }
+
+      requestAnimationFrame(animate);
+    }
+
+    function isInteractiveTarget(target) {
+      return !!target?.closest?.("a, button, input, textarea, select, label");
+    }
+
+    window.addEventListener("pointerdown", (event) => {
+      if (event.button !== 0) return;
+      if (isInteractiveTarget(event.target)) return;
+
+      isPointerDown = true;
+      lastX = event.clientX;
+      lastY = event.clientY;
+
+      document.body.classList.add("is-dragging-pixels");
+      event.preventDefault();
+    });
+
+    window.addEventListener("pointermove", (event) => {
+      if (!isPointerDown) return;
+
+      event.preventDefault();
+
+      const x = event.clientX;
+      const y = event.clientY;
+      const dx = x - lastX;
+      const dy = y - lastY;
+      const distance = Math.hypot(dx, dy);
+
+      if (distance > 2) {
+        spawnBurst(x, y, dx, dy);
+      }
+
+      lastX = x;
+      lastY = y;
+    });
+
+    window.addEventListener("pointerup", () => {
+      isPointerDown = false;
+      document.body.classList.remove("is-dragging-pixels");
+    });
+
+    window.addEventListener("pointercancel", () => {
+      isPointerDown = false;
+      document.body.classList.remove("is-dragging-pixels");
+    });
+
+    window.addEventListener("blur", () => {
+      isPointerDown = false;
+      document.body.classList.remove("is-dragging-pixels");
+    });
+
+    resizeCanvas();
+    window.addEventListener("resize", resizeCanvas);
+    requestAnimationFrame(animate);
+  });
+</script>
+
 <html lang="en">
   <head>
     <meta charset="utf-8" />
@@ -14,15 +383,52 @@ const {
     <title>{title}</title>
     <meta name="description" content={description} />
 
-    <!-- Fonts -->
-    <!-- Parisienne (signature font) -->
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
-
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;800&family=JetBrains+Mono:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
   </head>
+
   <body>
+    <CyberAmbientBackground />
     <Nav />
+
+    <nav class="section-nav" aria-label="Section navigation">
+      <div class="section-loader">
+        <span class="loader-rect loader-rect-top"></span>
+        <span class="loader-rect loader-rect-bottom"></span>
+      </div>
+
+      <div class="section-rail"></div>
+
+      <a href="#home" class="section-dot active" aria-label="Home">
+        <span class="section-dot-core"></span>
+      </a>
+
+      <a href="#about" class="section-dot" aria-label="About">
+        <span class="section-dot-core"></span>
+      </a>
+
+      <a href="#skills" class="section-dot" aria-label="Skills">
+        <span class="section-dot-core"></span>
+      </a>
+
+      <a href="#projects" class="section-dot" aria-label="Projects">
+        <span class="section-dot-core"></span>
+      </a>
+
+      <a href="#certifications" class="section-dot" aria-label="Certifications">
+        <span class="section-dot-core"></span>
+      </a>
+
+      <a href="#contact" class="section-dot" aria-label="Contact">
+        <span class="section-dot-core"></span>
+      </a>
+    </nav>
+
+    <canvas id="drag-trail-canvas" aria-hidden="true"></canvas>
+
     <slot />
   </body>
 </html>

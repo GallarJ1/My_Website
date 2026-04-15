@@ -1,28 +1,47 @@
 ---
 const links = [
-  { href: "/", label: "HOME" },
-  { href: "/about", label: "ABOUT" },
-// { href: "/blog", label: "MY BLOG" }, Possible future update
-  { href: "/projects", label: "PROJECTS" },
-  { href: "/certifications", label: "CERTIFICATIONS"},
+  { href: "#home", label: "HOME" },
+  { href: "#about", label: "ABOUT" },
+  { href: "#skills", label: "SKILLS" },
+  { href: "#projects", label: "PROJECTS" },
+  { href: "#certifications", label: "CERTIFICATIONS" },
+  {
+    href: "/resume/My_Resume.pdf",
+    label: "RESUME",
+    external: true,
+    specialClass: "resume-link",
+  },
 ];
 const pathname = Astro.url.pathname;
 ---
+
 <header class="navbar">
-  <div class="container nav-inner">
-    <!-- Left spacer keeps links centered (even with the Contact chip on the right) -->
-    <div class="nav-side"></div>
+  <div class="nav-shell">
+    <div class="nav-left-zone">
+      <span class="drag-hint">DRAG ANYWHERE</span>
+    </div>
 
     <nav class="nav-links">
-      {links.map(l => (
-        <a href={l.href} class={"nav-link" + (pathname === l.href ? " active" : "")}>
-          {l.label}
-        </a>
-      ))}
+      {
+        links.map((l) => (
+          <a
+            href={l.href}
+            class={
+              "nav-link" +
+              (pathname === l.href ? " active" : "") +
+              (l.specialClass ? ` ${l.specialClass}` : "")
+            }
+            target={l.external ? "_blank" : undefined}
+            rel={l.external ? "noopener noreferrer" : undefined}
+          >
+            {l.label}
+          </a>
+        ))
+      }
     </nav>
 
-    <div class="nav-side nav-right">
-      <a href="/contact" class="contact-chip">CONTACT</a>
+    <div class="nav-right-zone">
+      <a href="#contact" class="contact-chip">CONTACT</a>
     </div>
   </div>
 </header>

@@ -1,0 +1,428 @@
+---
+const lines = [
+  "jeremy@portfolio:~$ npm run dev",
+  "",
+  "> portfolio@1.0.0 dev",
+  "> astro dev",
+  "",
+  "12:42:01 [content] Syncing content",
+  "12:42:01 [types] Generated 215ms",
+  "12:42:02 [vite] ready in 642 ms",
+  "",
+  "┃ Local    http://localhost:4321/",
+  "┃ Network  use --host to expose",
+  "",
+  "> loading ui components...",
+  "> compiling projects...",
+  "> launching portfolio...",
+];
+
+const logoSrc = "/intro-logo.png";
+const logoAlt = "Jeremy portfolio logo";
+---
+
+<div id="intro-terminal" class="intro-terminal" aria-hidden="true">
+  <div class="intro-terminal__inner">
+    <button
+      id="intro-skip"
+      class="intro-terminal__skip"
+      type="button"
+      aria-label="Skip intro animation"
+    >
+      Skip Animation
+    </button>
+
+    <div id="intro-terminal-window" class="intro-terminal__window">
+      <div class="intro-terminal__bar">
+        <span class="dot red"></span>
+        <span class="dot yellow"></span>
+        <span class="dot green"></span>
+      </div>
+
+      <div class="intro-terminal__screen">
+        <pre id="intro-output" class="intro-terminal__output"></pre>
+        <span id="intro-caret" class="intro-terminal__caret">█</span>
+      </div>
+    </div>
+
+    <div id="intro-logo-stage" class="intro-logo-stage" aria-hidden="true">
+      <img
+        id="intro-logo"
+        class="intro-logo"
+        src={logoSrc}
+        alt={logoAlt}
+        draggable="false"
+      />
+    </div>
+  </div>
+</div>
+
+<script define:vars={{ lines }} is:inline>
+  (() => {
+    const intro = document.getElementById("intro-terminal");
+    const terminalWindow = document.getElementById("intro-terminal-window");
+    const logoStage = document.getElementById("intro-logo-stage");
+    const output = document.getElementById("intro-output");
+    const caret = document.getElementById("intro-caret");
+    const skipBtn = document.getElementById("intro-skip");
+
+    if (
+      !intro ||
+      !terminalWindow ||
+      !logoStage ||
+      !output ||
+      !caret ||
+      !skipBtn
+    )
+      return;
+
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+
+    let skipped = false;
+    let finished = false;
+
+    const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+    const finishIntro = () => {
+      if (finished) return;
+      finished = true;
+      document.body.classList.remove("intro-lock");
+      intro.classList.add("is-hidden");
+      setTimeout(() => intro.remove(), 700);
+    };
+
+    const skipIntro = () => {
+      if (finished) return;
+      skipped = true;
+      document.body.classList.remove("intro-lock");
+      finishIntro();
+    };
+
+    skipBtn.addEventListener("click", skipIntro);
+
+    const typeLine = async (line, speed = 42) => {
+      if (skipped) return;
+
+      if (line === "") {
+        output.textContent += "\n";
+        return;
+      }
+
+      for (const char of line) {
+        if (skipped) return;
+        output.textContent += char;
+        await sleep(speed);
+      }
+
+      output.textContent += "\n";
+    };
+
+    const showLogoPhase = async () => {
+      if (skipped) return;
+
+      terminalWindow.classList.add("is-fading");
+      caret.classList.add("is-hidden");
+
+      await sleep(650);
+      if (skipped) return;
+
+      logoStage.classList.add("is-visible");
+
+      await sleep(1800);
+      if (skipped) return;
+
+      finishIntro();
+    };
+
+    const runIntro = async () => {
+      document.body.classList.add("intro-lock");
+
+      if (prefersReducedMotion) {
+        output.textContent = lines.join("\n");
+        terminalWindow.classList.add("is-fading");
+        logoStage.classList.add("is-visible");
+        await sleep(900);
+        finishIntro();
+        return;
+      }
+
+      // First line types slower
+      await typeLine(lines[0], 52);
+
+      // Short pause after command
+      await sleep(280);
+
+      // Remaining lines appear with a controlled terminal rhythm
+      for (let i = 1; i < lines.length; i++) {
+        if (skipped) return;
+
+        const line = lines[i];
+
+        if (line === "") {
+          output.textContent += "\n";
+          await sleep(120);
+          continue;
+        }
+
+        output.textContent += line + "\n";
+
+        // tweak pacing by section
+        if (i <= 3) {
+          await sleep(240);
+        } else if (i <= 7) {
+          await sleep(180);
+        } else if (i <= 10) {
+          await sleep(220);
+        } else {
+          await sleep(260);
+        }
+      }
+
+      await sleep(700);
+      await showLogoPhase();
+    };
+
+    runIntro();
+  })();
+</script>
+
+<style>
+  .intro-terminal {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: grid;
+    place-items: center;
+    background:
+      radial-gradient(
+        circle at center,
+        rgba(92, 255, 92, 0.06),
+        transparent 38%
+      ),
+      rgba(3, 4, 6, 0.985);
+    opacity: 1;
+    visibility: visible;
+    transition:
+      opacity 0.65s ease,
+      visibility 0.65s ease;
+  }
+
+  .intro-terminal.is-hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .intro-terminal__inner {
+    width: min(980px, calc(100vw - 32px));
+    position: relative;
+    min-height: 520px;
+    display: grid;
+    place-items: center;
+  }
+
+  .intro-terminal__skip {
+    position: absolute;
+    top: -56px;
+    right: 0;
+    border: 1px solid rgba(92, 255, 92, 0.35);
+    background: rgba(10, 12, 16, 0.72);
+    color: #d7ffe0;
+    font: inherit;
+    font-size: 0.82rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 10px 14px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition:
+      transform 0.18s ease,
+      border-color 0.18s ease,
+      box-shadow 0.18s ease,
+      background 0.18s ease;
+    box-shadow: 0 0 18px rgba(92, 255, 92, 0.14);
+    z-index: 3;
+  }
+
+  .intro-terminal__skip:hover {
+    transform: translateY(-1px);
+    border-color: rgba(92, 255, 92, 0.65);
+    box-shadow: 0 0 24px rgba(92, 255, 92, 0.22);
+    background: rgba(10, 12, 16, 0.9);
+  }
+
+  .intro-terminal__window {
+    width: 100%;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(10, 12, 16, 0.82);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.04) inset,
+      0 0 50px rgba(92, 255, 92, 0.08),
+      0 24px 80px rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(10px);
+    opacity: 1;
+    transform: scale(1);
+    transition:
+      opacity 0.65s ease,
+      transform 0.65s ease,
+      filter 0.65s ease;
+    z-index: 1;
+  }
+
+  .intro-terminal__window.is-fading {
+    opacity: 0;
+    transform: scale(0.98);
+    filter: blur(6px);
+  }
+
+  .intro-terminal__bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.04),
+      rgba(255, 255, 255, 0.015)
+    );
+  }
+
+  .dot {
+    width: 11px;
+    height: 11px;
+    border-radius: 999px;
+    display: inline-block;
+  }
+
+  .dot.red {
+    background: #ff5f57;
+  }
+  .dot.yellow {
+    background: #ffbd2f;
+  }
+  .dot.green {
+    background: #28c840;
+  }
+
+  .intro-terminal__screen {
+    position: relative;
+    min-height: 420px;
+    padding: 28px 28px 34px;
+    background:
+      linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.018) 1px, transparent 1px),
+      #050608;
+    background-size:
+      100% 3px,
+      3px 100%,
+      auto;
+    overflow: hidden;
+  }
+
+  .intro-terminal__screen::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.03),
+      rgba(255, 255, 255, 0) 18%,
+      rgba(255, 255, 255, 0) 82%,
+      rgba(255, 255, 255, 0.02)
+    );
+    mix-blend-mode: screen;
+  }
+
+  .intro-terminal__output {
+    margin: 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+    font-family: "JetBrains Mono", "Consolas", monospace;
+    font-size: clamp(0.92rem, 1.1vw, 1.02rem);
+    line-height: 1.7;
+    color: #5cff5c;
+    text-shadow:
+      0 0 6px rgba(92, 255, 92, 0.45),
+      0 0 18px rgba(92, 255, 92, 0.18);
+  }
+
+  .intro-terminal__caret {
+    display: inline-block;
+    margin-left: 2px;
+    color: #a8ffb0;
+    text-shadow: 0 0 10px rgba(92, 255, 92, 0.55);
+    animation: intro-caret-blink 1s step-end infinite;
+    transition: opacity 0.25s ease;
+  }
+
+  .intro-terminal__caret.is-hidden {
+    opacity: 0;
+  }
+
+  .intro-logo-stage {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(0.96);
+    transition:
+      opacity 0.75s ease,
+      transform 0.75s ease;
+    z-index: 2;
+  }
+
+  .intro-logo-stage.is-visible {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .intro-logo {
+    width: min(620px, 72vw);
+    max-height: 58vh;
+    object-fit: contain;
+    filter: drop-shadow(0 0 12px rgba(92, 255, 92, 0.2))
+      drop-shadow(0 0 28px rgba(0, 225, 255, 0.16));
+    user-select: none;
+  }
+
+  @keyframes intro-caret-blink {
+    0%,
+    49% {
+      opacity: 1;
+    }
+    50%,
+    100% {
+      opacity: 0;
+    }
+  }
+
+  @media (max-width: 720px) {
+    .intro-terminal__inner {
+      width: min(100vw - 20px, 980px);
+      min-height: 460px;
+    }
+
+    .intro-terminal__skip {
+      top: -48px;
+      font-size: 0.75rem;
+      padding: 9px 12px;
+    }
+
+    .intro-terminal__screen {
+      min-height: 360px;
+      padding: 22px 18px 26px;
+    }
+
+    .intro-logo {
+      width: min(86vw, 520px);
+    }
+  }
+</style>

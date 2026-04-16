@@ -138,24 +138,39 @@ const { title = "Jeremy — Portfolio", description = "Personal site" } =
       const getScrollableParent = (target) => {
         if (!(target instanceof Element)) return null;
 
-        return target.closest(
-          "[data-allow-scroll], .allow-native-scroll, .projects-grid, .modal-body",
-        );
+        let el = target;
+
+        while (el && el !== document.body) {
+          if (el instanceof HTMLElement) {
+            const style = window.getComputedStyle(el);
+            const overflowY = style.overflowY;
+            const canScroll =
+              (overflowY === "auto" ||
+                overflowY === "scroll" ||
+                overflowY === "overlay") &&
+              el.scrollHeight > el.clientHeight + 1;
+
+            if (canScroll) return el;
+          }
+
+          el = el.parentElement;
+        }
+
+        return null;
       };
 
       const canScrollInDirection = (element, direction) => {
         if (!(element instanceof HTMLElement)) return false;
 
-        const { scrollTop, scrollHeight, clientHeight } = element;
-        const maxScrollTop = scrollHeight - clientHeight;
+        const maxScrollTop = element.scrollHeight - element.clientHeight;
 
         if (maxScrollTop <= 0) return false;
 
         if (direction > 0) {
-          return scrollTop < maxScrollTop - 1;
+          return element.scrollTop < maxScrollTop - 1;
         }
 
-        return scrollTop > 1;
+        return element.scrollTop > 1;
       };
 
       window.addEventListener(
@@ -165,7 +180,22 @@ const { title = "Jeremy — Portfolio", description = "Personal site" } =
           if (Math.abs(delta) < 18) return;
 
           const direction = delta > 0 ? 1 : -1;
+          const modalOpen = !!document.querySelector(
+            "#modal-root:not([hidden])",
+          );
           const scrollableParent = getScrollableParent(e.target);
+
+          if (modalOpen) {
+            if (
+              scrollableParent &&
+              canScrollInDirection(scrollableParent, direction)
+            ) {
+              return;
+            }
+
+            e.preventDefault();
+            return;
+          }
 
           if (
             scrollableParent &&

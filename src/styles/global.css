@@ -712,3 +712,7 @@ body.is-dragging-pixels * {
     transform: scaleX(1);
   }
 }
+
+body.intro-lock {
+  overflow: hidden;
+}

@@ -716,3 +716,121 @@ body.is-dragging-pixels * {
 body.intro-lock {
   overflow: hidden;
 }
+
+.secure-portal-panel {
+  border: 1px solid rgba(0, 255, 170, 0.25);
+  background: rgba(8, 12, 18, 0.82);
+  border-radius: 22px;
+  padding: 1.25rem;
+  box-shadow: 0 0 30px rgba(0, 255, 170, 0.08);
+}
+
+.secure-portal-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.secure-eyebrow {
+  color: #00ffaa;
+  letter-spacing: 0.16em;
+  font-size: 0.72rem;
+  margin-bottom: 0.4rem;
+}
+
+.secure-portal-header h3 {
+  margin: 0;
+  color: white;
+}
+
+.secure-portal-header p {
+  color: rgba(255,255,255,.68);
+  margin-top: .4rem;
+}
+
+.secure-portal-header button {
+  border: 1px solid rgba(0,255,170,.4);
+  background: rgba(0,255,170,.08);
+  color: #00ffaa;
+  border-radius: 999px;
+  padding: .65rem 1rem;
+  cursor: pointer;
+}
+
+.secure-portal-flow {
+  margin: 1.2rem 0;
+  display: flex;
+  gap: .65rem;
+  flex-wrap: wrap;
+  align-items: center;
+  color: #00ffaa;
+}
+
+.secure-portal-flow span {
+  border: 1px solid rgba(0,255,170,.25);
+  border-radius: 999px;
+  padding: .45rem .75rem;
+  background: rgba(0,255,170,.06);
+}
+
+.secure-portal-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: .8rem;
+}
+
+.secure-card {
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 16px;
+  padding: .9rem;
+  background: rgba(255,255,255,.04);
+}
+
+.secure-card small {
+  display: block;
+  color: rgba(255,255,255,.55);
+  margin-bottom: .35rem;
+}
+
+.secure-card strong {
+  color: white;
+  font-size: 1.1rem;
+}
+
+.secure-data-columns {
+  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .9rem;
+}
+
+.secure-data-columns h4 {
+  color: white;
+  margin: 0 0 .65rem;
+}
+
+.secure-row {
+  display: flex;
+  justify-content: space-between;
+  gap: .75rem;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+  padding: .55rem 0;
+  color: rgba(255,255,255,.78);
+}
+
+.secure-row em {
+  color: #00ffaa;
+  font-style: normal;
+}
+
+@media (max-width: 800px) {
+  .secure-portal-grid,
+  .secure-data-columns {
+    grid-template-columns: 1fr;
+  }
+
+  .secure-portal-header {
+    flex-direction: column;
+  }
+}

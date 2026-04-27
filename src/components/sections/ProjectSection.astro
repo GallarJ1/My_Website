@@ -3,7 +3,7 @@ import CloudLabModal from "../projects/CloudLabModal.astro";
 import TerminalIntro from "../Terminal_Intro.astro";
 import ProjectCard from "../ProjectCard.astro";
 import ModalShell from "../ModalShell.astro";
-import BitlockerModal from "../projects/BitlockerModal.astro";
+import AWSPortalModal from "../projects/AWSPortalModal.astro";
 import AutoForgeModal from "../projects/AutoForgeModal.astro";
 import KubePlatformModal from "../projects/KubePlatformModal.astro";
 
@@ -21,9 +21,9 @@ const projects = [
     category: "developer",
   },
   {
-    id: "bitlocker",
-    title: "BitLocker Enforcement",
-    thumb: "/images/Cover/Bitlocker.png",
+    id: "aws",
+    title: "AWS Secure Enterprise Portal",
+    thumb: "/images/Cover/aws.png",
     category: "developer",
   },
   {
@@ -91,12 +91,12 @@ const projects = [
       </ModalShell>
     </div>
 
-    <div class="modal-wrap" data-modal="bitlocker" hidden>
+    <div class="modal-wrap" data-modal="aws" hidden>
       <ModalShell
-        title="BitLocker Enforcement"
-        tagline="Hands-off device encryption"
+        title="AWS Secure Enterprise Portal"
+        tagline="Live AWS EC2 + private PostgresSQL RDS demo"
       >
-        <BitlockerModal />
+        <AWSPortalModal />
       </ModalShell>
     </div>
   </div>

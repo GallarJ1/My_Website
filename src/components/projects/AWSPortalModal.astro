@@ -1,0 +1,173 @@
+---
+import SecurePortalPanel from "../../islands/SecurePortalPanel";
+---
+
+<section class="aws-modal glass-surface">
+  <header class="head">
+    <h3 class="title">AWS Secure Enterprise Portal</h3>
+    <span class="muted">EC2 · PostgreSQL RDS · VPC · Security Groups</span>
+  </header>
+
+  <div class="section">
+    <h4>Live AWS Backend</h4>
+    <SecurePortalPanel client:visible />
+  </div>
+
+  <div class="section">
+    <h4>Project Overview</h4>
+    <p>
+      AWS Secure Enterprise Portal is a cloud-hosted internal business platform
+      demo built on Amazon EC2 and PostgreSQL RDS. The project demonstrates a
+      real web API hosted on AWS, connected to a private database through
+      controlled security group access.
+    </p>
+    <p>
+      The portal exposes live asset and ticket data from PostgreSQL, allowing my
+      portfolio frontend to query a real AWS backend instead of static mock
+      data.
+    </p>
+  </div>
+
+  <div class="section">
+    <h4>Architecture</h4>
+    <p>
+      The current cost-optimized version uses a public EC2 instance for the Node
+      API and a private RDS PostgreSQL database. The database is not publicly
+      accessible; only the EC2 security group is allowed to connect on port
+      5432.
+    </p>
+
+    <div class="arch-flow">
+      <span>Portfolio Website</span>
+      <b>→</b>
+      <span>EC2 Node API</span>
+      <b>→</b>
+      <span>Private RDS PostgreSQL</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <h4>Enterprise Upgrade Path</h4>
+    <p>
+      The production-style version of this architecture can be expanded with an
+      Application Load Balancer, AWS WAF, and EC2 Auto Scaling. Those components
+      were planned as the enterprise layer, while the current live version keeps
+      costs low for portfolio hosting.
+    </p>
+
+    <div class="arch-flow enterprise">
+      <span>User</span>
+      <b>→</b>
+      <span>WAF</span>
+      <b>→</b>
+      <span>ALB</span>
+      <b>→</b>
+      <span>Auto Scaling EC2</span>
+      <b>→</b>
+      <span>RDS</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <h4>Why It’s Impressive</h4>
+    <ul class="bullets">
+      <li>Built a custom AWS VPC with public and private subnet design.</li>
+      <li>
+        Deployed a live Node.js API on EC2 using PM2 for process management.
+      </li>
+      <li>Connected EC2 securely to private PostgreSQL RDS.</li>
+      <li>
+        Configured security groups so the database is not exposed publicly.
+      </li>
+      <li>
+        Designed an enterprise-ready upgrade path using ALB, WAF, and Auto
+        Scaling.
+      </li>
+    </ul>
+  </div>
+</section>
+
+<style>
+  .aws-modal {
+    display: grid;
+    gap: 18px;
+    padding: 22px;
+    border-radius: 18px;
+    background: radial-gradient(
+      120% 120% at 0% 0%,
+      rgba(0, 40, 48, 0.35) 0%,
+      rgba(0, 14, 18, 0.55) 60%,
+      rgba(0, 10, 14, 0.7) 100%
+    );
+    border: 1px solid rgba(0, 255, 255, 0.18);
+    box-shadow:
+      0 0 35px rgba(0, 255, 255, 0.1),
+      inset 0 0 1px rgba(255, 255, 255, 0.05);
+  }
+
+  .head {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .title,
+  .section h4 {
+    font-family: Orbitron, system-ui, sans-serif;
+    color: #9bdcff;
+    letter-spacing: 0.06em;
+    text-shadow: 0 0 10px rgba(0, 200, 255, 0.25);
+    margin: 0;
+  }
+
+  .title {
+    font-size: 1.05rem;
+  }
+
+  .section h4 {
+    font-size: 0.95rem;
+    margin: 8px 0 8px;
+  }
+
+  .muted {
+    color: rgba(200, 230, 240, 0.75);
+  }
+
+  .section p,
+  .section li {
+    font-family: "JetBrains Mono", monospace;
+    color: rgba(210, 240, 250, 0.9);
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  .bullets {
+    margin: 0;
+    padding-left: 18px;
+  }
+
+  .arch-flow {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 9px;
+    margin-top: 12px;
+    font-family: "JetBrains Mono", monospace;
+    color: #00ffaa;
+  }
+
+  .arch-flow span {
+    border: 1px solid rgba(0, 255, 170, 0.25);
+    background: rgba(0, 255, 170, 0.06);
+    border-radius: 999px;
+    padding: 8px 11px;
+    box-shadow: 0 0 18px rgba(0, 255, 170, 0.06);
+  }
+
+  .arch-flow.enterprise span {
+    border-color: rgba(0, 229, 255, 0.25);
+    background: rgba(0, 229, 255, 0.06);
+    color: #b7ecff;
+  }
+</style>

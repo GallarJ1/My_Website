@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const API = "http://3.138.121.84:3000";
+const API = "https://api.jeremygallardo.com";
 
 export default function SecurePortalPanel() {
   const [health, setHealth] = useState<any>(null);

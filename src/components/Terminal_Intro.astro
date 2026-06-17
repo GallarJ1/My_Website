@@ -1,8 +1,7 @@
 ---
 /**
  * TerminalIntro.astro
- * A hero-style fake terminal banner with ASCII art (updated with user's version),
- * neon cyan glow, startup CRT-style flicker (once), and staged boot lines.
+ * Project-section terminal banner with ASCII art, neon glow, and staged boot lines.
  */
 interface Props {
   title?: string;
@@ -23,6 +22,7 @@ __          __  _                            _                            _____ 
 } = Astro.props as Props;
 ---
 
+<!-- Projects intro terminal; content is decorative context before project cards. -->
 <section class="terminal-hero" aria-labelledby="projects-terminal-title">
   <h1 id="projects-terminal-title" class="sr-only">{title}</h1>
   <div class="terminal">
@@ -48,6 +48,7 @@ __          __  _                            _                            _____ 
 </section>
 
 <style>
+  /* Terminal banner shell, ASCII treatment, boot lines, and responsive sizing. */
   :root {
     --neon-cyan: #00e5ff;
     --neon-green: #39ff14;
@@ -211,6 +212,7 @@ __          __  _                            _                            _____ 
 </style>
 
 <script>
+  // Adds one-time startup choreography once the project section enters the DOM.
   (() => {
     const section = document.querySelector(".terminal-hero");
     if (!section) return;

@@ -1,14 +1,8 @@
 ---
-/**
- * Props:
- * - title: string
- * - imgSrc: string
- * - imgAlt: string
- * - moreUrl: string
- * - summary: string
- */
+// Legacy certificate card retained for smaller certificate link layouts.
 const { title, imgSrc, imgAlt, moreUrl, summary } = Astro.props;
 ---
+
 <article class="card">
   <h3 class="title">{title}</h3>
 
@@ -21,6 +15,7 @@ const { title, imgSrc, imgAlt, moreUrl, summary } = Astro.props;
 </article>
 
 <style>
+  /* Standalone certificate card: image preview, source link, and hover pulse. */
   .card{
     --glass: rgba(10,14,16,.55);
     --border: rgba(var(--accent) / .28);

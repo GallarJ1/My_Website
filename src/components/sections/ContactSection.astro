@@ -1,4 +1,5 @@
 ---
+// Contact section: all external profile/contact targets in one data list.
 import LinkBubble from "../LinkBubble.astro";
 
 const NAME = "Jeremy Gallardo";
@@ -19,6 +20,7 @@ const links = [
 ---
 
 <div class="wrap">
+  <!-- Centered contact card with staggered link rows. -->
   <section class="card">
     <img src={HEADSHOT} alt={`${NAME} headshot`} class="avatar" />
     <h1 class="name">{NAME}</h1>
@@ -36,6 +38,7 @@ const links = [
 </div>
 
 <style>
+  /* Contact section layout. Link-specific styling lives in LinkBubble.astro. */
   .wrap {
     min-height: auto;
     display: grid;

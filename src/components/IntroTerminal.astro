@@ -1,4 +1,5 @@
 ---
+// Startup terminal overlay content used before the main portfolio shell.
 const lines = [
   "jeremy@portfolio:~$ npm run dev",
   "",
@@ -21,6 +22,7 @@ const logoSrc = "/intro-logo.png";
 const logoAlt = "Jeremy portfolio logo";
 ---
 
+<!-- Intro overlay: staged boot log and progress visuals. -->
 <div id="intro-terminal" class="intro-terminal" aria-hidden="true">
   <div class="intro-terminal__inner">
     <button
@@ -58,6 +60,7 @@ const logoAlt = "Jeremy portfolio logo";
 </div>
 
 <script define:vars={{ lines }} is:inline>
+  // Plays the intro once, then releases the page scroll lock.
   (() => {
     const intro = document.getElementById("intro-terminal");
     const terminalWindow = document.getElementById("intro-terminal-window");
@@ -189,6 +192,7 @@ const logoAlt = "Jeremy portfolio logo";
 </script>
 
 <style>
+  /* Intro overlay shell, terminal frame, and boot-line animation. */
   .intro-terminal {
     position: fixed;
     inset: 0;

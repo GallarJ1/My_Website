@@ -1,4 +1,5 @@
 ---
+// Projects section: project metadata, card grid, and matching modal bodies.
 import CloudLabModal from "../projects/CloudLabModal.astro";
 import TerminalIntro from "../Terminal_Intro.astro";
 import ProjectCard from "../ProjectCard.astro";
@@ -36,6 +37,7 @@ const projects = [
 ---
 
 <div class="projects-section">
+  <!-- Terminal heading and mode switch frame the project gallery. -->
   <TerminalIntro title="Welcome to my Projects" />
 
   <div class="project-mode-switch">
@@ -47,7 +49,7 @@ const projects = [
     </button>
   </div>
 
-  <!-- ❗ removed id="projects" to avoid conflict -->
+  <!-- Project cards. Keep this section un-id'd because index.astro owns #projects. -->
   <section class="projects-grid">
     {
       projects.map((p) => (
@@ -62,7 +64,7 @@ const projects = [
     }
   </section>
 
-  <!-- Modals -->
+  <!-- Modal registry. The script below toggles the matching data-modal wrapper. -->
   <div id="modal-root" hidden>
     <div class="modal-wrap" data-modal="cloudlab" hidden>
       <ModalShell
@@ -104,6 +106,7 @@ const projects = [
 
 <script>
   // @ts-nocheck
+  // Handles project filtering, modal open/close, escape key, and overlay clicks.
   const grid = document.querySelector(".projects-grid");
   const root = document.getElementById("modal-root");
 
@@ -174,6 +177,7 @@ const projects = [
 </script>
 
 <style>
+  /* Project section controls and responsive card grid. Modal shell styles live in ModalShell.astro. */
   .project-mode-switch {
     display: flex;
     justify-content: center;

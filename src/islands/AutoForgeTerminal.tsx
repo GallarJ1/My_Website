@@ -1,8 +1,10 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 
+/* ================= Types ================= */
 type Msg = { role: "user" | "assistant" | "system"; content: string };
 type Props = { apiUrl: string };
 
+/* ================= Main Terminal ================= */
 export default function AutoForgeTerminal({ apiUrl }: Props) {
   const [messages, setMessages] = useState<Msg[]>([]);
   const [input, setInput] = useState("");
@@ -24,7 +26,7 @@ export default function AutoForgeTerminal({ apiUrl }: Props) {
     setErr(null);
     setBusy(true);
 
-    // append user message
+    // Append user input before sending the combined conversation to the API.
     setMessages(m => [...m, { role: "user", content: text }]);
     setInput("");
 
@@ -46,7 +48,7 @@ export default function AutoForgeTerminal({ apiUrl }: Props) {
       const raw = await res.text();
       let reply = "";
 
-      // Try common response shapes
+      // Accept common API response shapes so the UI is tolerant of backend changes.
       try {
         const json = raw ? JSON.parse(raw) : {};
         reply =
@@ -62,7 +64,7 @@ export default function AutoForgeTerminal({ apiUrl }: Props) {
       const ms = Math.max(0, Math.round(performance.now() - t0));
       setMessages(m => [...m, { role: "assistant", content: reply || "(no content)" }]);
 
-      // Optional: show a subtle status line
+      // Show a subtle status line after assistant output.
       setMessages(m => [...m, { role: "system", content: `✓ responded in ${ms}ms from ${origin}` }]);
     } catch (e: any) {
       setErr(e?.message || "Network error");
@@ -146,6 +148,7 @@ export default function AutoForgeTerminal({ apiUrl }: Props) {
   );
 }
 
+/* ================= Tiny UI Atoms ================= */
 function Line({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   return <div className={className}>{children}</div>;
 }
@@ -169,7 +172,8 @@ function Block({ role, text }: { role: Msg["role"]; text: string }) {
   );
 }
 
-// very light sanitization for display
+/* ================= Display Helpers ================= */
+// Very light sanitization for terminal display only.
 function sanitize(s: string) {
   return s.replace(/\s+/g, " ").trim();
 }

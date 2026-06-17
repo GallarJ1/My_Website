@@ -1,4 +1,5 @@
 ---
+// Reusable project teaser card used by ProjectSection's grid.
 interface Props {
   id: string;
   title: string;
@@ -10,6 +11,7 @@ interface Props {
 const { id, title, thumb, alt } = Astro.props;
 ---
 
+<!-- Keyboard-accessible card trigger; modal wiring lives in ProjectSection. -->
 <article
   class="card"
   id={id}
@@ -23,6 +25,7 @@ const { id, title, thumb, alt } = Astro.props;
 </article>
 
 <style>
+  /* Project card surface, thumbnail treatment, and hover affordances. */
   .card {
     background: var(--bg);
     border: 1px solid var(--cyanBorder);

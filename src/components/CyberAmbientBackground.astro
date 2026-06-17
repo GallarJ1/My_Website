@@ -1,3 +1,4 @@
+<!-- Full-page cyber ambience layer used behind the portfolio shell. -->
 <div class="cyber-ambient" aria-hidden="true">
   <canvas id="cyber-ambient-canvas"></canvas>
   <div class="cyber-vignette"></div>
@@ -5,6 +6,7 @@
 </div>
 
 <script is:inline>
+  // Canvas particle field; decorative only and disabled for non-canvas contexts.
   document.addEventListener("DOMContentLoaded", () => {
     const canvas = document.getElementById("cyber-ambient-canvas");
     if (!(canvas instanceof HTMLCanvasElement)) return;
@@ -136,6 +138,7 @@
 </script>
 
 <style>
+  /* Ambient canvas, vignette, and low-contrast grid backdrop. */
   .cyber-ambient {
     position: fixed;
     inset: 0;

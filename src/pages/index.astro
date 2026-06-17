@@ -1,9 +1,10 @@
 ---
+// Page composition: imports the shared shell plus every one-page portfolio section.
 import BaseLayout from "../layouts/BaseLayout.astro";
 import IntroTerminal from "../components/IntroTerminal.astro";
 import RotatingTypewriter from "../components/RotatingTypewriter.astro";
 
-// ✅ Sections
+// Section components rendered in scroll-snap order.
 import SkillSection from "../components/sections/SkillSection.astro";
 import AboutSection from "../components/sections/AboutSection.astro";
 import ProjectsSection from "../components/sections/ProjectSection.astro";
@@ -16,7 +17,7 @@ const roles = ["Systems & Cloud Engineer", "DevOps & Automation Specialist"];
 <BaseLayout title="Jeremy — Portfolio">
   <IntroTerminal />
   <main class="onepage-shell">
-    <!-- HERO -->
+    <!-- Home / hero section -->
     <section id="home" class="page-section hero">
       <div class="container">
         <div class="kicker">WELCOME</div>
@@ -52,27 +53,27 @@ const roles = ["Systems & Cloud Engineer", "DevOps & Automation Specialist"];
       </div>
     </section>
 
-    <!-- ABOUT -->
+    <!-- About section -->
     <section id="about" class="page-section allow-native-scroll">
       <AboutSection />
     </section>
 
-    <!-- SKILLS -->
+    <!-- Skills section -->
     <section id="skills" class="page-section">
       <SkillSection />
     </section>
 
-    <!-- PROJECTS -->
+    <!-- Projects section -->
     <section id="projects" class="page-section">
       <ProjectsSection />
     </section>
 
-    <!-- CERTIFICATIONS -->
+    <!-- Certifications section -->
     <section id="certifications" class="page-section allow-native-scroll">
       <CertificationsSection />
     </section>
 
-    <!-- CONTACT -->
+    <!-- Contact section -->
     <section id="contact" class="page-section">
       <ContactSection />
     </section>
@@ -80,6 +81,7 @@ const roles = ["Systems & Cloud Engineer", "DevOps & Automation Specialist"];
 </BaseLayout>
 
 <script is:inline>
+  // Hero micro-interaction: scramble the intro copy on hover/focus, then restore it.
   document.addEventListener("DOMContentLoaded", () => {
     const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789<>/$#{}[]";
     const items = document.querySelectorAll(".scramble-text");
@@ -122,7 +124,7 @@ const roles = ["Systems & Cloud Engineer", "DevOps & Automation Specialist"];
 </script>
 
 <style>
-  /* HERO specific */
+  /* Home section overrides. Shared hero typography lives in global.css. */
   .hero {
     text-align: center;
   }

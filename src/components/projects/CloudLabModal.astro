@@ -1,10 +1,12 @@
 ---
+// CloudLab project detail content rendered inside ModalShell.
 import CloudLabPanel from "../../islands/CloudLabPanel";
 
 const API_URL = "https://app-mylab-dev-api.azurewebsites.net/api/health";
 const ARCH_IMG = "/images/Diagrams/Cloud Diagram.svg";
 ---
 
+<!-- Modal body: Azure API health demo, architecture diagram, and IaC context. -->
 <section class="wrap">
   <header class="head">
     <h3 class="title">CloudLab — Azure App Service API</h3>
@@ -12,10 +14,10 @@ const ARCH_IMG = "/images/Diagrams/Cloud Diagram.svg";
     >
   </header>
 
-  <!-- Interaction (match BitLocker/AutoForge) -->
+  <!-- Live interaction panel. -->
   <div class="section">
     <h4>Interaction Window</h4>
-    <!-- ⬇️ No extra terminal-bar here; CloudLabPanel draws its own header -->
+    <!-- CloudLabPanel draws its own terminal header. -->
     <CloudLabPanel apiUrl={API_URL} client:visible />
   </div>
 
@@ -113,7 +115,7 @@ const ARCH_IMG = "/images/Diagrams/Cloud Diagram.svg";
 </section>
 
 <style>
-  /* === Unified Neon Glass Design (matches BitLocker & AutoForge) === */
+  /* CloudLab modal sections, architecture image, and responsive detail layout. */
   .wrap {
     display: grid;
     gap: 18px;

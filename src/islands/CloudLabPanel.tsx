@@ -19,7 +19,7 @@ class PanelErrorBoundary extends React.Component<{ children: React.ReactNode }, 
   }
 }
 
-/* ================= Typewriter Hooks (slower) ================= */
+/* ================= Typewriter Hooks ================= */
 function useTypewriter(text: string, msPerChar = 80) {
   const [out, setOut] = useState("");
   useEffect(() => {
@@ -82,7 +82,7 @@ type CallResult = {
   bodyPreview: string; fullJson?: unknown; timeMs: number; at: string;
 };
 
-/* ================= Main ================= */
+/* ================= Public Wrapper ================= */
 export default function CloudLabPanel(props: CloudLabPanelProps) {
   return (
     <PanelErrorBoundary>
@@ -91,6 +91,7 @@ export default function CloudLabPanel(props: CloudLabPanelProps) {
   );
 }
 
+/* ================= Main Panel ================= */
 function CloudLabPanelInner({ apiUrl, baseUrl }: CloudLabPanelProps) {
   const derivedBase = useMemo(() => {
     try { return new URL(apiUrl).origin; }
@@ -102,7 +103,7 @@ function CloudLabPanelInner({ apiUrl, baseUrl }: CloudLabPanelProps) {
   const [history, setHistory] = useState<CallResult[]>([]);
   const termRef = useRef<HTMLDivElement | null>(null);
 
-  // Slow typewriter content
+  // Intro copy typed into the terminal header area.
   const heading = "Use the commands below to query the CloudLab API:";
   const typedHeading = useTypewriter(heading, 80);
   useCascade(
@@ -116,12 +117,12 @@ function CloudLabPanelInner({ apiUrl, baseUrl }: CloudLabPanelProps) {
     350
   );
 
-  // Autoscroll terminal
+  // Keep the latest request result visible in the terminal output.
   useEffect(() => {
     termRef.current?.scrollTo({ top: termRef.current.scrollHeight, behavior: "smooth" });
   }, [history]);
 
-  // Fetch helper
+  // Fetch helper used by all command buttons.
   const requestInit: globalThis.RequestInit = useMemo(
     () => ({ method: "GET", headers: { Accept: "application/json" } }),
     []
@@ -187,7 +188,7 @@ function CloudLabPanelInner({ apiUrl, baseUrl }: CloudLabPanelProps) {
     pathRef.current?.classList.remove("paused");
   }
 
-  // Button click only (no auto-call)
+  // Button click only; no automatic API calls on mount.
   const run = async (path: string) => {
     setError(null);
 
@@ -213,7 +214,7 @@ function CloudLabPanelInner({ apiUrl, baseUrl }: CloudLabPanelProps) {
 
   return (
     <div className="terminal-box" style={{ minHeight: 280 }}>
-      {/* Header */}
+      {/* Terminal header */}
       <div className="terminal-bar">
         <span className="terminal-dot red" />
         <span className="terminal-dot yellow" />
@@ -222,7 +223,7 @@ function CloudLabPanelInner({ apiUrl, baseUrl }: CloudLabPanelProps) {
         <div className="muted" style={{ marginLeft: "auto", fontSize: 12 }}>{new Date().toLocaleTimeString()}</div>
       </div>
 
-      {/* Viz + Instructions */}
+      {/* Network visualization and usage instructions */}
       <div style={{ padding: "0 16px 6px" }}>
         <div className="net-viz">
           <svg viewBox="0 0 600 60" preserveAspectRatio="xMidYMid meet">
@@ -246,7 +247,7 @@ function CloudLabPanelInner({ apiUrl, baseUrl }: CloudLabPanelProps) {
         </ul>
       </div>
 
-      {/* Buttons */}
+      {/* Command buttons */}
       <div className="cmdbar btn-row" style={{ alignItems: "center" }}>
         <button className="btn-terminal" title="Returns service health" onClick={() => run("/api/health")}>Check Health</button>
         <button className="btn-terminal" title="Simple reachability test" onClick={() => run("/api/ping")}>Ping</button>
@@ -254,7 +255,7 @@ function CloudLabPanelInner({ apiUrl, baseUrl }: CloudLabPanelProps) {
         <span className="muted" style={{ gridColumn: "1 / -1", textAlign: "right", fontSize: 12, marginTop: 4 }}>Ready.</span>
       </div>
 
-      {/* Terminal output */}
+      {/* Terminal output history */}
       <div ref={termRef} className="terminal-screen" style={{ minHeight: 120 }}>
         <Line>$ connect {root}</Line>
         <Line className="muted"># Live Azure API — first request may take a few seconds to wake</Line>

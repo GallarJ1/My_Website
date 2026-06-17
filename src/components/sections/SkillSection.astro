@@ -1,4 +1,5 @@
 ---
+// Skills section data. Add/remove skill rows here; the grid animation is index-based.
 const skills = [
   { name: "Kubernetes", logo: "/logos/Kubernetes.svg" },
   { name: "Azure", logo: "/logos/Azure.svg" },
@@ -19,6 +20,7 @@ const skills = [
 ---
 
 <section class="skills-wrap js-skills-wrap">
+  <!-- Soft background glow behind the skill list panel. -->
   <div class="skills-bg-glow" aria-hidden="true"></div>
 
   <div class="skills-shell">
@@ -58,6 +60,7 @@ const skills = [
 </section>
 
 <script>
+  // Activates the staggered skill reveal when the section enters the viewport.
   const initSkillsSection = () => {
     const section = document.querySelector(".js-skills-wrap");
     if (!section) return;
@@ -95,6 +98,7 @@ const skills = [
 </script>
 
 <style>
+  /* Skills section shell, panel, and header. */
   .skills-wrap {
     width: min(1180px, 100%);
     height: calc(100svh - 88px);
@@ -207,6 +211,7 @@ const skills = [
     line-height: 1.65;
   }
 
+  /* Skills section grid, dividers, and individual rows. */
   .skills-grid-wrap {
     position: relative;
   }
@@ -366,6 +371,7 @@ const skills = [
     transform: scaleX(1.04);
   }
 
+  /* Skills section animation keyframes. */
   @keyframes dividerPulse {
     0% {
       opacity: 0;
@@ -394,6 +400,7 @@ const skills = [
     }
   }
 
+  /* Skills section responsive and reduced-motion behavior. */
   @media (max-width: 900px) {
     .skills-grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));

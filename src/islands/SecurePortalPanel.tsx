@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 
+/* ================= API Configuration ================= */
 const API = "https://api.jeremygallardo.com";
 
+/* ================= Live AWS Demo Panel ================= */
 export default function SecurePortalPanel() {
   const [health, setHealth] = useState<any>(null);
   const [db, setDb] = useState<any>(null);
@@ -38,6 +40,7 @@ export default function SecurePortalPanel() {
 
   return (
     <div className="secure-portal-panel">
+      {/* Header and refresh action */}
       <div className="secure-portal-header">
         <div>
           <p className="secure-eyebrow">AWS LIVE DEMO</p>
@@ -53,6 +56,7 @@ export default function SecurePortalPanel() {
         </button>
       </div>
 
+      {/* High-level request/data path */}
       <div className="secure-portal-flow">
         <span>User</span>
         <b>→</b>
@@ -61,6 +65,7 @@ export default function SecurePortalPanel() {
         <span>Private RDS</span>
       </div>
 
+      {/* Live summary metrics */}
       <div className="secure-portal-grid">
         <div className="secure-card">
           <small>API Status</small>
@@ -83,6 +88,7 @@ export default function SecurePortalPanel() {
         </div>
       </div>
 
+      {/* Live database rows */}
       <div className="secure-data-columns">
         <div>
           <h4>Managed Assets</h4>

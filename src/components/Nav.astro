@@ -1,4 +1,6 @@
 ---
+// Fixed top navigation. Section links are intercepted by BaseLayout's smooth
+// one-page navigation, while Resume remains a normal external document link.
 const links = [
   { href: "#home", label: "HOME" },
   { href: "#about", label: "ABOUT" },
@@ -16,6 +18,7 @@ const pathname = Astro.url.pathname;
 ---
 
 <header class="navbar">
+  <!-- Three-zone layout keeps the nav centered while retaining side affordances. -->
   <div class="nav-shell">
     <div class="nav-left-zone">
       <span class="drag-hint">DRAG ANYWHERE</span>

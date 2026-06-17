@@ -1,4 +1,5 @@
 ---
+// Global page shell: nav, ambient background, section dots, and app-wide effects.
 import Nav from "../components/Nav.astro";
 import CyberAmbientBackground from "../components/CyberAmbientBackground.astro";
 import "../styles/global.css";
@@ -8,6 +9,8 @@ const { title = "Jeremy — Portfolio", description = "Personal site" } =
 ---
 
 <script is:inline>
+  // One-page navigation: locks wheel/touch movement to the nearest section while
+  // still allowing native scrolling inside sections and modal bodies.
   document.addEventListener("DOMContentLoaded", () => {
     const sections = [...document.querySelectorAll(".page-section")];
     const dots = [...document.querySelectorAll(".section-dot")];
@@ -261,6 +264,7 @@ const { title = "Jeremy — Portfolio", description = "Personal site" } =
       setActiveDot();
     }
 
+    // Drag-trail canvas: decorative particle effect behind the fixed navigation.
     const canvas = document.getElementById("drag-trail-canvas");
     if (!(canvas instanceof HTMLCanvasElement)) return;
 
@@ -408,6 +412,7 @@ const { title = "Jeremy — Portfolio", description = "Personal site" } =
 
 <html lang="en">
   <head>
+    <!-- Document metadata and global font loading. -->
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <title>{title}</title>
@@ -425,9 +430,11 @@ const { title = "Jeremy — Portfolio", description = "Personal site" } =
   </head>
 
   <body>
+    <!-- Global visual chrome shared by every section. -->
     <CyberAmbientBackground />
     <Nav />
 
+    <!-- Fixed dot navigation mirrors the one-page section order in index.astro. -->
     <nav class="section-nav" aria-label="Section navigation">
       <div class="section-loader">
         <span class="loader-rect loader-rect-top"></span>
@@ -461,6 +468,7 @@ const { title = "Jeremy — Portfolio", description = "Personal site" } =
       </a>
     </nav>
 
+    <!-- Pointer particle trail drawn by the inline script above. -->
     <canvas id="drag-trail-canvas" aria-hidden="true"></canvas>
 
     <slot />

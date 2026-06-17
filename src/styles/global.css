@@ -1,4 +1,5 @@
-/* ==================== GLOBAL BASE ==================== */
+/* GLOBAL FOUNDATION
+   Affects every page: design tokens, reset, base typography, and shared container. */
 :root {
   --bg: #0a0a0b;
   --text: #e7e7ea;
@@ -36,7 +37,8 @@ a {
   padding: 0 24px;
 }
 
-/* ---------- NAVBAR with dispersing center glow ---------- */
+/* NAVIGATION - Nav.astro
+   Fixed top navigation, center glow effect, responsive nav layout, and contact chip. */
 .navbar{
   position: fixed;
   top: 0;
@@ -49,7 +51,7 @@ a {
   overflow: hidden;
 }
 
-/* static thin white hairline (baseline) */
+/* Baseline hairline below the fixed nav. */
 .navbar::after{
   content:"";
   position:absolute;
@@ -60,15 +62,14 @@ a {
   opacity:.5;
 }
 
-/* animated dispersing glow from center -> edges */
+/* Dispersing center glow animation below the fixed nav. */
 .navbar::before{
   content:"";
   position:absolute;
   left:0; right:0; bottom:0;
-  height:2px;                 /* core line height; the blur will make it “thicker” */
+  height:2px;
   pointer-events:none;
 
-  /* Start with a tight bright core at center that fades outward */
   background:
     radial-gradient(ellipse at 50% 50%,
       rgba(255,255,255,0.95) 0%,
@@ -78,19 +79,17 @@ a {
       rgba(255,255,255,0.00) 70%
     );
 
-  /* We “stretch” the radial glow horizontally during the animation */
   background-repeat: no-repeat;
   background-position: center bottom;
-  background-size: 20% 100%;  /* will animate to 100% */
+  background-size: 20% 100%;
 
-  /* The blur + opacity animate too for that dispersing look */
   filter: blur(2px);
   opacity: .85;
 
   animation: disperseGlow 3.6s ease-in-out infinite;
 }
 
-/* animation: grow width from 20% to 100%, soften (more blur), and fade */
+/* Nav glow expands from the center and softens as it spreads. */
 @keyframes disperseGlow{
   0%   { background-size: 20% 100%;  filter: blur(2px);  opacity:.95; }
   50%  { background-size: 100% 100%; filter: blur(5px);  opacity:.8;  }
@@ -98,7 +97,7 @@ a {
   100% { background-size: 100% 100%; filter: blur(9px);  opacity:.4;  }
 }
 
-/* reduce motion accessibility */
+/* Motion accessibility fallback for animated nav glow. */
 @media (prefers-reduced-motion: reduce){
   .navbar::before{ animation: none; opacity:.5; filter: blur(4px); background-size: 100% 100%; }
 }
@@ -238,7 +237,8 @@ a {
     0 0 18px rgba(204, 255, 0, 0.9),
     0 0 36px rgba(204, 255, 0, 0.45);
 }
-/* ==================== HERO SECTION ==================== */
+/* HOME SECTION - src/pages/index.astro
+   Hero typography, subtitle copy, scramble text hook, and primary CTA styling. */
 .hero {
   text-align: center;
   padding: 0;
@@ -335,7 +335,8 @@ a {
   letter-spacing: 0.04em;
 }
 
-/* ==================== CARET BLINK ==================== */
+/* SHARED INLINE CARET
+   Used by hero/typewriter-style text components. */
 .caret {
   display: inline-block;
   width: 1ch;
@@ -344,7 +345,8 @@ a {
   animation: blink 1s step-end infinite;
 }
 
-/* ===== CloudLab Terminal – styles ===== */
+/* SHARED TERMINAL UI
+   Used by CloudLabPanel, AutoForgeTerminal, and project modal terminal surfaces. */
 .kbd {
   padding: 0.05rem 0.35rem;
   border: 1px solid rgba(255, 255, 255, 0.12);
@@ -352,7 +354,7 @@ a {
   background: rgba(255, 255, 255, 0.04);
 }
 
-/* terminal container (glass + neon ring) */
+/* Terminal container with glass surface and neon ring. */
 .terminal-box {
   border: 1px solid rgba(255,255,255,0.10);
   border-radius: 16px;
@@ -362,7 +364,7 @@ a {
   min-height: 280px;
 }
 
-/* black “screen” */
+/* Terminal output screen. */
 .terminal-screen {
   background: #0b0b0c;
   border: 1px solid rgba(255,255,255,0.08);
@@ -376,7 +378,7 @@ a {
   line-height: 1.45;
 }
 
-/* header bar dots */
+/* Terminal header controls. */
 .terminal-bar {
   display: flex;
   align-items: center;
@@ -388,7 +390,7 @@ a {
 .terminal-dot.yellow { background: #ffbd2e; }
 .terminal-dot.green  { background: #27c93f; }
 
-/* lighter, evenly spaced command buttons */
+/* Terminal command buttons. */
 .btn-terminal {
   border: 1px solid rgba(0, 255, 255, 0.45);
   background: rgba(0, 255, 255, 0.08);
@@ -411,7 +413,7 @@ a {
   color: rgba(255,255,255,0.65);
 }
 
-/* 3 equal columns for buttons */
+/* Equal-width terminal command grid. */
 .btn-row {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -425,7 +427,7 @@ a {
   background: rgba(255,255,255,0.02);
 }
 
-/* typewriter caret */
+/* Terminal typewriter output. */
 .typewriter {
   white-space: pre-wrap;
   overflow: hidden;
@@ -439,20 +441,20 @@ a {
 .warn  { color: #f59e0b; }
 .err   { color: #ef4444; }
 
-/* mini network viz (client -> API) */
+/* CloudLabPanel network path visualization. */
 .net-viz { padding: 8px 16px 2px; }
 .net-viz svg { width: 100%; height: 42px; }
 .net-node { fill: rgba(0,255,255,0.10); stroke: rgba(0,255,255,0.60); }
 .net-label { font: 12px "JetBrains Mono", monospace; fill: rgba(223, 252, 255, 0.9); }
 .net-path { stroke: rgba(0,255,255,0.85); stroke-width: 2; stroke-dasharray: 6 8; animation: dash-move 1.2s linear infinite; }
-/* moving packet dot on the network viz */
+/* Moving packet dot for request animation. */
 .net-packet {
-  r: 5; /* radius for SVG circle */
-  fill: #22c55e; /* will be toggled to red on error via inline style */
+  r: 5;
+  fill: #22c55e;
   filter: drop-shadow(0 0 6px rgba(0,255,255,0.65));
 }
 
-/* pause the dashed flow while we play the request animation */
+/* Pauses the idle dashed flow while a request animation runs. */
 .net-path.paused {
   animation: none !important;
 }
@@ -472,7 +474,7 @@ a {
 }
 .legend .row {
   display: grid;
-  grid-template-columns: 14px 90px 1fr; /* even spacing */
+  grid-template-columns: 14px 90px 1fr;
   gap: 8px;
   align-items: center;
   color: rgba(200,230,240,.85);
@@ -487,11 +489,13 @@ a {
 }
 .legend .val {
   justify-self: end;
-  min-width: 30px; /* keeps numbers aligned */
+  min-width: 30px;
   text-align: right;
   opacity: .9;
 }
 
+/* ONE-PAGE SCROLL SHELL - BaseLayout.astro + src/pages/index.astro
+   Controls scroll snap, per-section viewport sizing, and hidden browser scrollbars. */
 html {
   scroll-behavior: smooth;
   scroll-snap-type: y mandatory;
@@ -569,6 +573,8 @@ body::-webkit-scrollbar {
   display: none;
 }
 
+/* SECTION DOT NAV - BaseLayout.astro
+   Fixed right-side progress dots for one-page navigation. */
 .section-nav {
   position: fixed;
   right: 24px;
@@ -615,6 +621,8 @@ body::-webkit-scrollbar {
 }
 
 
+/* GLOBAL INTERACTION EFFECT - BaseLayout.astro
+   Body drag state and full-screen canvas for the pixel trail effect. */
 body {
   position: relative;
   margin: 0;
@@ -642,9 +650,8 @@ body.is-dragging-pixels * {
   z-index: 1050;
 }
 
-/* ============================== */
-/* RESUME LINK - RED BREATHING   */
-/* ============================== */
+/* RESUME NAV LINK - Nav.astro
+   Red breathing treatment for the resume link in the fixed nav. */
 
 .resume-link {
   position: relative;
@@ -654,7 +661,7 @@ body.is-dragging-pixels * {
   animation: resumeBreath 2.8s ease-in-out infinite;
 }
 
-/* underline glow */
+/* Animated underline glow for the resume link. */
 .resume-link::after {
   content: "";
   position: absolute;
@@ -672,7 +679,7 @@ body.is-dragging-pixels * {
   animation: resumeUnderlineBreath 2.8s ease-in-out infinite;
 }
 
-/* hover = stronger */
+/* Hover tightens the pulse and raises contrast. */
 .resume-link:hover {
   color: #ffffff;
   animation-duration: 1.4s;
@@ -681,8 +688,6 @@ body.is-dragging-pixels * {
 .resume-link:hover::after {
   animation-duration: 1.4s;
 }
-
-/* ============================== */
 
 @keyframes resumeBreath {
   0%, 100% {
@@ -713,10 +718,14 @@ body.is-dragging-pixels * {
   }
 }
 
+/* INTRO OVERLAY - IntroTerminal.astro
+   Prevents page scrolling while the boot animation is visible. */
 body.intro-lock {
   overflow: hidden;
 }
 
+/* AWS SECURE PORTAL PANEL - SecurePortalPanel.tsx
+   Live AWS backend demo embedded inside AWSPortalModal. */
 .secure-portal-panel {
   border: 1px solid rgba(0, 255, 170, 0.25);
   background: rgba(8, 12, 18, 0.82);

@@ -1,9 +1,6 @@
 ---
-// Props:
-// href: string (required)
-// label: string (required)
-// icon: string (emoji or short text)
-// external?: boolean (opens in new tab if true)
+// Reusable pill link for contact/social CTAs.
+// external opens the target in a new tab with safe rel attributes.
 const { href, label, icon = "🔗", external = false } = Astro.props;
 const target = external ? "_blank" : undefined;
 const rel = external ? "noopener noreferrer" : undefined;
@@ -15,6 +12,7 @@ const rel = external ? "noopener noreferrer" : undefined;
 </a>
 
 <style>
+  /* Compact contact bubble styling used by ContactSection. */
   .bubble {
     --teal: 0 255 200;
     --bg: rgba(255, 255, 255, 0.03);

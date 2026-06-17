@@ -1,8 +1,9 @@
 ---
-
+// About section: animated identity scan followed by personal story cards.
 ---
 
 <section class="about-scan-wrap js-about-scan">
+  <!-- Decorative glyph burst used during the scan animation. -->
   <div class="bg-burst" aria-hidden="true">
     <span class="burst-char burst-1">0</span>
     <span class="burst-char burst-2">1</span>
@@ -20,6 +21,7 @@
     <span class="burst-char burst-12">]</span>
   </div>
 
+  <!-- Terminal-style identity scan panel. -->
   <div class="scan-panel">
     <div class="scan-topbar">
       <span class="scan-dot scan-dot-red"></span>
@@ -45,6 +47,7 @@
     </div>
   </div>
 
+  <!-- Story and working-style content cards. -->
   <div class="scan-content">
     <article class="scan-card reveal-1">
       <span class="card-trace card-trace-top-left"></span>
@@ -109,6 +112,7 @@
 </section>
 
 <script>
+  // Replays the About scan sequence each time the section re-enters view.
   const initAboutScan = () => {
     const section = document.querySelector<HTMLElement>(".js-about-scan");
     if (!section) return;
@@ -158,6 +162,7 @@
 </script>
 
 <style>
+  /* About section shell and animated background glyphs. */
   .about-scan-wrap {
     width: min(1180px, 100%);
     min-height: auto;
@@ -241,7 +246,9 @@
     left: 76%;
   }
 
+  /* About section scan panel and terminal body. */
   .scan-panel,
+  /* About section story cards and pillar list. */
   .scan-content {
     position: relative;
     z-index: 1;
@@ -545,6 +552,7 @@
     margin: 0;
   }
 
+  /* About section entrance choreography. */
   .about-scan-wrap.is-active .burst-1 {
     animation: burstFloat 1.2s ease-out 0.15s 1 both;
   }
@@ -827,6 +835,7 @@
     }
   }
 
+  /* About section responsive and accessibility rules. */
   @media (max-width: 920px) {
     .about-scan-wrap {
       min-height: auto;

@@ -1,12 +1,14 @@
 ---
+// AutoForge project detail content rendered inside ModalShell.
 import AutoForgeTerminal from "../../islands/AutoForgeTerminal";
 const ARCH_IMG = "/images/Diagrams/AutoForge_Diagram.svg";
 
-// ⬅️ Set this to your FastAPI chat endpoint
+// FastAPI chat endpoint consumed by the interactive terminal island.
 const API_URL =
   "https://autoforge-api-cqhebzf2dwh0cef7.centralus-01.azurewebsites.net/ai/chat";
 ---
 
+<!-- Modal body: project summary, architecture, and live AI terminal demo. -->
 <section class="autoforge glass-surface">
   <header class="head">
     <h3 class="title">AutoForge — GPT Backend &amp; Azure CI/CD</h3>
@@ -15,7 +17,7 @@ const API_URL =
     >
   </header>
 
-  <!-- Live interaction (like CloudLab terminal) -->
+  <!-- Live interaction terminal. -->
   <div class="section-head">
     <h4 class="section-title">Interaction Window</h4>
   </div>
@@ -122,6 +124,7 @@ const API_URL =
 </section>
 
 <style>
+  /* AutoForge modal layout, architecture imagery, stack chips, and live demo frame. */
   .autoforge {
     border-radius: 18px;
     padding: 20px;
@@ -145,6 +148,29 @@ const API_URL =
     text-shadow: 0 0 10px rgba(0, 200, 255, 0.25);
     letter-spacing: 0.06em;
     font-weight: 600;
+    margin: 8px 0 6px;
+  }
+
+  .title,
+  .section-title {
+    font-family: Orbitron, system-ui, sans-serif;
+    color: #9bdcff;
+    text-shadow: 0 0 10px rgba(0, 200, 255, 0.25);
+    letter-spacing: 0.06em;
+    font-weight: 600;
+  }
+
+  .title {
+    font-size: 1.05rem;
+    margin: 0;
+  }
+
+  .section-head {
+    display: grid;
+    gap: 8px;
+  }
+
+  .section-title {
     margin: 8px 0 6px;
   }
 

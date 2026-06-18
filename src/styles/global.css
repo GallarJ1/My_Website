@@ -641,6 +641,12 @@ body.is-dragging-pixels * {
   cursor: grabbing;
 }
 
+body.modal-open {
+  width: 100%;
+  overflow: hidden;
+  touch-action: none;
+}
+
 #drag-trail-canvas {
   position: fixed;
   inset: 0;

@@ -235,7 +235,6 @@ const { title = "Jeremy — Portfolio", description = "Personal site" } =
       window.addEventListener(
         "touchmove",
         (e) => {
-          if (wheelLock || isAnimating || touchLocked) return;
           if (!e.touches?.length) return;
 
           const currentY = e.touches[0].clientY;
@@ -243,9 +242,40 @@ const { title = "Jeremy — Portfolio", description = "Personal site" } =
 
           if (Math.abs(delta) < TOUCH_THRESHOLD) return;
 
-          touchLocked = true;
+          const direction = delta > 0 ? 1 : -1;
+          const modalOpen = !!document.querySelector(
+            "#modal-root:not([hidden])",
+          );
+          const scrollableParent = getScrollableParent(e.target);
 
-          if (delta > 0) {
+          if (modalOpen) {
+            if (
+              scrollableParent &&
+              canScrollInDirection(scrollableParent, direction)
+            ) {
+              return;
+            }
+
+            e.preventDefault();
+            return;
+          }
+
+          if (
+            scrollableParent &&
+            canScrollInDirection(scrollableParent, direction)
+          ) {
+            return;
+          }
+
+          if (wheelLock || isAnimating || touchLocked) {
+            e.preventDefault();
+            return;
+          }
+
+          touchLocked = true;
+          e.preventDefault();
+
+          if (direction > 0) {
             goToNextSection();
           } else {
             goToPrevSection();
@@ -255,7 +285,7 @@ const { title = "Jeremy — Portfolio", description = "Personal site" } =
             touchLocked = false;
           }, SCROLL_LOCK_MS);
         },
-        { passive: true },
+        { passive: false },
       );
 
       window.addEventListener("scroll", onScroll, { passive: true });

@@ -113,6 +113,16 @@ const projects = [
   const modeButtons = document.querySelectorAll(".mode-btn");
   const projectSlots = document.querySelectorAll(".project-slot");
 
+  function lockPageScroll() {
+    document.body.classList.add("modal-open");
+  }
+
+  function unlockPageScroll() {
+    document.body.classList.remove("modal-open");
+    const projectsSection = document.getElementById("projects");
+    projectsSection?.scrollIntoView({ block: "start", behavior: "auto" });
+  }
+
   function setProjectMode(mode) {
     modeButtons.forEach((btn) => {
       btn.classList.toggle("active", btn.dataset.mode === mode);
@@ -127,7 +137,7 @@ const projects = [
   function showModal(id) {
     if (!root) return;
     root.hidden = false;
-    document.body.style.overflow = "hidden";
+    lockPageScroll();
 
     root.querySelectorAll(".modal-wrap").forEach((el) => {
       el.hidden = true;
@@ -140,7 +150,7 @@ const projects = [
   function closeAll() {
     if (!root) return;
     root.hidden = true;
-    document.body.style.overflow = "";
+    unlockPageScroll();
 
     root.querySelectorAll(".modal-wrap").forEach((el) => {
       el.hidden = true;

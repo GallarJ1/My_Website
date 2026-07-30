@@ -6,6 +6,10 @@
   --muted: #9aa1aa;
   --accent: #ccff00;
   --ring: rgba(204, 255, 0, 0.65);
+  --nav-height: 88px;
+  --section-pad-x: 24px;
+  --section-pad-top: 20px;
+  --section-pad-bottom: 32px;
 }
 
 * {
@@ -108,7 +112,7 @@ a {
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
   width: 100%;
-  min-height: 88px;
+  min-height: var(--nav-height);
   padding: 0 28px;
   gap: 18px;
 }
@@ -499,7 +503,7 @@ a {
 html {
   scroll-behavior: smooth;
   scroll-snap-type: y mandatory;
-  scroll-padding-top: 88px;
+  scroll-padding-top: var(--nav-height);
 }
 
 .onepage-shell {
@@ -507,21 +511,22 @@ html {
 }
 
 .page-section {
-  min-height: calc(100svh - 88px);
+  min-height: calc(100dvh - var(--nav-height));
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  scroll-margin-top: 88px;
+  scroll-margin-top: var(--nav-height);
   scroll-snap-align: start;
-  padding: 20px 24px 32px;
+  padding: var(--section-pad-top) var(--section-pad-x) var(--section-pad-bottom);
   box-sizing: border-box;
 }
 
 .page-section.allow-native-scroll {
-  height: calc(100svh - 88px);
+  height: calc(100dvh - var(--nav-height));
   overflow-y: auto;
   overflow-x: hidden;
   overscroll-behavior: contain;
+  scrollbar-gutter: stable;
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
@@ -533,11 +538,11 @@ html {
 }
 
 #home.page-section {
-  min-height: 100svh;
+  min-height: 100dvh;
   box-sizing: border-box;
   align-items: center;
   justify-content: center;
-  padding: 88px 24px 56px;
+  padding: var(--nav-height) var(--section-pad-x) 56px;
 }
 
 #home .container {
@@ -645,6 +650,65 @@ body.modal-open {
   width: 100%;
   overflow: hidden;
   touch-action: none;
+}
+
+/* SHORT VIEWPORT RESPONSIVENESS - Nav.astro + all page sections
+   Tightens vertical chrome on laptop-height screens so fixed navigation and
+   section content do not fight for the same viewport space. */
+@media (min-width: 901px) and (max-height: 850px) {
+  :root {
+    --nav-height: 72px;
+    --section-pad-x: 20px;
+    --section-pad-top: 14px;
+    --section-pad-bottom: 22px;
+  }
+
+  .nav-shell {
+    padding: 0 22px;
+    gap: 14px;
+  }
+
+  .nav-links {
+    gap: clamp(20px, 4vw, 42px);
+  }
+
+  .nav-link {
+    font-size: 0.8rem;
+  }
+
+  .drag-hint {
+    min-height: 34px;
+    font-size: 0.74rem;
+    letter-spacing: 0.18em;
+  }
+
+  .contact-chip {
+    padding: 8px 12px;
+  }
+
+  #home.page-section {
+    padding-bottom: 36px;
+  }
+}
+
+@media (min-width: 901px) and (max-height: 720px) {
+  :root {
+    --nav-height: 64px;
+    --section-pad-top: 10px;
+    --section-pad-bottom: 18px;
+  }
+
+  .nav-links {
+    gap: clamp(16px, 3.2vw, 34px);
+  }
+
+  .nav-link {
+    font-size: 0.74rem;
+  }
+
+  .contact-chip {
+    padding: 7px 11px;
+  }
 }
 
 #drag-trail-canvas {

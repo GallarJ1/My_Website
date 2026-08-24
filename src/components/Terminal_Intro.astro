@@ -231,6 +231,36 @@ __          __  _                            _                            _____ 
       font-size: 12px;
     }
   }
+
+  @media (min-width: 901px) and (max-height: 720px) {
+    .terminal-hero {
+      padding: 0 10px 8px;
+    }
+
+    .terminal {
+      width: min(1120px, 96vw);
+      padding: 14px 20px;
+      border-radius: 14px;
+    }
+
+    .ascii {
+      font-size: clamp(7px, 0.86vw, 10px);
+      line-height: 0.95;
+      margin-bottom: 9px;
+    }
+
+    .line {
+      font-size: 0.82rem;
+    }
+
+    .see-more {
+      right: 14px;
+      bottom: 10px;
+      padding: 6px 10px;
+      border-radius: 8px;
+      font-size: 11px;
+    }
+  }
 </style>
 
 <script>

@@ -82,4 +82,22 @@ const { id, title, thumb, alt } = Astro.props;
     letter-spacing: 0.2px;
     color: var(--text);
   }
+
+  @media (min-width: 901px) and (max-height: 720px) {
+    .card {
+      gap: 8px;
+      padding: 10px;
+      border-radius: 14px;
+    }
+
+    .thumb {
+      border-radius: 10px;
+      aspect-ratio: 16 / 9;
+    }
+
+    .title {
+      font-size: 0.86rem;
+      line-height: 1.25;
+    }
+  }
 </style>

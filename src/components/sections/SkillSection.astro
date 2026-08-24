@@ -492,6 +492,58 @@ const skills = [
     }
   }
 
+  @media (min-width: 901px) and (max-height: 720px) {
+    .skills-wrap {
+      padding-top: 6px;
+    }
+
+    .skills-shell {
+      width: min(900px, 100%);
+      padding: 14px 18px 14px;
+      border-radius: 18px;
+    }
+
+    .skills-header {
+      margin-bottom: 10px;
+    }
+
+    .skills-kicker {
+      margin-bottom: 5px;
+      font-size: 0.62rem;
+    }
+
+    .skills-title {
+      font-size: clamp(1.45rem, 2.5vw, 1.95rem);
+    }
+
+    .skills-sub {
+      margin-top: 6px;
+      font-size: 0.78rem;
+      line-height: 1.38;
+    }
+
+    .skills-grid {
+      column-gap: 24px;
+      row-gap: 4px;
+    }
+
+    .skill-row {
+      min-height: 31px;
+      padding: 4px 3px 6px;
+      gap: 10px;
+    }
+
+    .skill-logo {
+      width: 21px;
+      height: 21px;
+      flex-basis: 21px;
+    }
+
+    .skill-label {
+      font-size: 0.8rem;
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .skills-header,
     .skill-row,

@@ -195,6 +195,65 @@ const providers = [
       },
     ],
   },
+  {
+    key: "fortinet",
+    label: "Fortinet",
+    logo: "/images/fortinet-logo.png",
+    items: [
+      {
+        title: "Fortinet NSE 1 - Certified in Cybersecurity",
+        shortTitle: "NSE 1",
+        imgSrc: "/certs/NSE_1.png",
+        imgAlt: "Fortinet NSE 1 certificate",
+        moreUrl:
+          "https://training.fortinet.com/local/staticpage/view.php?page=nse_1",
+        summary:
+          "Entry-level cybersecurity and cloud fundamentals, including threat awareness and core security concepts.",
+        categories: ["Security", "Cloud", "Foundations"],
+        issued: "2026",
+        status: "Active",
+      },
+      {
+        title: "Fortinet NSE 2 - Certified in Cybersecurity",
+        shortTitle: "NSE 2",
+        imgSrc: "/certs/NSE_2.png",
+        imgAlt: "Fortinet NSE 2 certificate",
+        moreUrl:
+          "https://training.fortinet.com/local/staticpage/view.php?page=nse_2",
+        summary:
+          "Next-generation firewall fundamentals and Fortinet security product concepts for network protection.",
+        categories: ["Security", "Networking", "Firewall"],
+        issued: "2026",
+        status: "Active",
+      },
+      {
+        title: "Fortinet NSE 3 - Certified in Cybersecurity",
+        shortTitle: "NSE 3",
+        imgSrc: "/certs/NSE_3.png",
+        imgAlt: "Fortinet NSE 3 certificate",
+        moreUrl:
+          "https://training.fortinet.com/local/staticpage/view.php?page=nse_3",
+        summary:
+          "FortiGate operator skills for common firewall features, network hardening, and day-to-day security operations.",
+        categories: ["Security", "Networking", "Firewall"],
+        issued: "2026",
+        status: "Active",
+      },
+      {
+        title: "Fortinet NSE 4 - Certified in FortiOS",
+        shortTitle: "NSE 4",
+        imgSrc: "/certs/NSE_4.png",
+        imgAlt: "Fortinet NSE 4 certificate",
+        moreUrl:
+          "https://training.fortinet.com/local/staticpage/view.php?page=nse_4",
+        summary:
+          "FortiOS administration for configuring, operating, and troubleshooting FortiGate firewall solutions.",
+        categories: ["Security", "Firewall", "Administration"],
+        issued: "2026",
+        status: "Active",
+      },
+    ],
+  },
 ];
 
 const availableCertImages = new Set([
@@ -202,6 +261,10 @@ const availableCertImages = new Set([
   "/certs/Az_104.png",
   "/certs/Az_900.png",
   "/certs/ITF.png",
+  "/certs/NSE_1.png",
+  "/certs/NSE_2.png",
+  "/certs/NSE_3.png",
+  "/certs/NSE_4.png",
 ]);
 
 // Flatten provider groups for the card grid and filter metadata.
@@ -225,6 +288,7 @@ const categoryFilters = [
   "Networking",
   "DevOps",
   "Administration",
+  "Firewall",
   "Support",
   "Foundations",
   "Architecture",

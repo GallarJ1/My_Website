@@ -13,25 +13,25 @@ const projects = [
     id: "cloudlab",
     title: "Terraform CloudLab",
     thumb: "/images/Cover/CloudLab.png",
-    category: "developer",
+    category: "Cloud DevOps",
   },
   {
     id: "autoforge",
     title: "CI/CD AutoForge AI",
     thumb: "/images/Cover/Autoforge.png",
-    category: "developer",
+    category: "Cloud DevOps",
   },
   {
     id: "aws",
     title: "AWS Secure Enterprise Portal",
     thumb: "/images/Cover/aws.png",
-    category: "developer",
+    category: "Cloud DevOps",
   },
   {
     id: "kubernetes",
     title: "Kubernetes DevOps Platform",
     thumb: "/images/Cover/Kubernetes.png",
-    category: "developer",
+    category: "Cloud DevOps",
   },
 ];
 ---
@@ -41,11 +41,11 @@ const projects = [
   <TerminalIntro title="Welcome to my Projects" />
 
   <div class="project-mode-switch">
-    <button class="mode-btn active" type="button" data-mode="developer">
-      Developer
+    <button class="mode-btn active" type="button" data-mode="Cloud DevOps">
+      Cloud DevOps
     </button>
-    <button class="mode-btn" type="button" data-mode="administrator">
-      Administrator
+    <button class="mode-btn" type="button" data-mode="developer">
+      Developer
     </button>
   </div>
 
@@ -183,7 +183,7 @@ const projects = [
     .querySelectorAll(".overlay")
     .forEach((el) => el.addEventListener("click", closeAll));
 
-  setProjectMode("developer");
+  setProjectMode("Cloud DevOps");
 </script>
 
 <style>

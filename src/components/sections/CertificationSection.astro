@@ -549,6 +549,11 @@ const vendorDistribution = providers.map((provider) => ({
     };
 
     if ("IntersectionObserver" in window) {
+      // Observe the compact header instead of the full dashboard. On mobile the
+      // dashboard is several viewports tall, so a percentage threshold on the
+      // whole element may never be reached and every reveal item stays hidden.
+      const revealTrigger =
+        dashboard.querySelector(".cert-header") || dashboard;
       const observer = new IntersectionObserver(
         (entries) => {
           entries.forEach((entry) => {
@@ -561,7 +566,7 @@ const vendorDistribution = providers.map((provider) => ({
         { threshold: 0.12 },
       );
 
-      observer.observe(dashboard);
+      observer.observe(revealTrigger);
     } else {
       showDashboard();
     }
@@ -1394,6 +1399,11 @@ const vendorDistribution = providers.map((provider) => ({
   }
 
   .reveal-item {
+    opacity: 1;
+    transform: none;
+  }
+
+  .cert-dashboard[data-ready="true"] .reveal-item {
     opacity: 0;
     transform: translateY(14px);
   }
